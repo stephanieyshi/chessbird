@@ -1,5 +1,5 @@
-var routes = require('./routes.js')
+var routes = require('./routes.js');
+var tweets = require('./tweet.js');
 
-routes.app.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port %d in %s mode", this.address().port, routes.app.settings.env);
-});
+routes.app.listen(3000);
+console.log("Listening on localhost:3000");
