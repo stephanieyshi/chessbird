@@ -1,5 +1,5 @@
 {
-  "name": "wanderlust",
+  "name": "chessbird",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stephanieyshi/wanderlust.git"
+    "url": "git+https://github.com/stephanieyshi/chessbird.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/stephanieyshi/wanderlust/issues"
+    "url": "https://github.com/stephanieyshi/chessbird/issues"
   },
-  "homepage": "https://github.com/stephanieyshi/wanderlust#readme",
+  "homepage": "https://github.com/stephanieyshi/chessbirdt#readme",
   "dependencies": {
     "express": "^4.16.2",
     "handlebars": "^4.0.11",
