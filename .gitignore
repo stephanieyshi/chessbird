@@ -10,3 +10,4 @@ semantic/dist/themes/*
 !semantic/dist/themes/default/
 .sass-cache/
 style.css.map
+app-env
