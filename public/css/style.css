@@ -1,12 +1,6 @@
-body {
-  background-color: #000000;
-  color: #CCCCCC;
-  font-family: Comic Sans;
+.buttons {
   position: fixed;
   top: 50%;
   left: 50%; }
-
-#input-form-button {
-  color: aqua; }
 
 /*# sourceMappingURL=style.css.map */

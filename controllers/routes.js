@@ -15,8 +15,12 @@ app.use('/public', express.static(path.join(__dirname, "../public")));
 app.use('/semantic', express.static(path.join(__dirname, '../semantic')));
 app.use('/img', express.static(path.join(__dirname, '../views/img')));
 
-app.get('/', function (req, res) {
+app.get('/play', function (req, res) {
   res.render('../views/index');
+})
+
+app.get('/', function (req, res) {
+    res.render('../views/landing');
 })
 
 exports.app = app;

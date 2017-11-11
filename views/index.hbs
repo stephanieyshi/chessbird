@@ -2,18 +2,26 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="../public/css/style.css">
 </head>
 <body>
-        <div id="board" style="width: 400px"></div>
-        <button class="ui disabled button" id="confirmBtn">Confirm</button>
-        <button class="ui button" id="startBtn">Start</button>
-        <button class="ui button" id="clearBtn">Clear</button>
+    
+    <script id="board-template" type="text/x-handlebars-template">
+    </script>
+
   
     <!--Your new content will be displayed in here-->
     <div class="content-placeholder"></div>
-
+    
+    <div class="buttons">
+        <button class="ui disabled button" id="confirmBtn">Confirm</button>
+        <button class="ui button" id="startBtn">Start</button>
+        <button class="ui button" id="clearBtn">Clear</button>
+    </div>
+    
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
     <script type="text/javascript" src="../semantic/dist/semantic.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
     <script type="text/javascript" src="../public/js/chessboard-0.3.0.min.js"></script>
