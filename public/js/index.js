@@ -1,15 +1,17 @@
 // parameters needed; pass in whether they are black or white
 // 1. black or white
 // 2. current state of the board
-data = {
-	player: 'w',
-	board: 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R'
-}
+
 /*$.ajax({
 	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {*/
 	$(document).ready(function() {
-		var chess = new Chess();
+		data = {
+			player: 'b',
+			board: 'r1k4r/p2nb1p1/2b4p/1p1n1p2/2PP4/3Q1NB1/1P3PPP/R5K1 b - c3 0 19' // should be a FEN
+		};
+		var chess = new Chess(data.board);
+		var s; 
 
 		var onDragStart = function (source, piece, position, orientation) {
 			if (piece[0] != data.player) {
@@ -18,19 +20,30 @@ data = {
 		}
 
 		var onDrop = function (source, target) {
+			if (!s) {
+				s = source;
+			}
+			if (target == s) {
+				$('#confirmBtn').addClass('disabled');
+				s = null;
+				return 'snapback';
+			}
 			var move = chess.move({
 				from: source,
 				to: target,
 				promotion: 'q'
 			})
+			console.log(move);
 
 			if (move === null) {
 				// do something that notifies of an invalid move
+				s = null;
 				$('body').append('Invalid move bro');
 				return 'snapback';
 			}
 
-			// if it's valid, turn on the "confirm" button 
+			// if it's valid, turn on the "confirm" button
+			s = source; 
 			console.log('valid!');
 			$('#confirmBtn').removeClass('disabled');
 		}
