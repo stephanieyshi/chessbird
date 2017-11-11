@@ -1,14 +1,14 @@
-var Twitter = require('twitter-js-client').Twitter;
+var Twitter = require('twitter');
 
+// put into environment variables
 var config = {
-  "consumerKey": "rd5ca3rFW7dimqQCh1SdiYcOb",
-	"consumerSecret": "x3bihWCrj1gjZdPgbATf6S5bTrHsXrnbCYYrZMgA8g7A4nMI57",
-	"accessToken": "929380989775867904-f3YgvYh0QIiJSaqu0SgECoXFR02OQkG",
-	"accessTokenSecret": "zm2Yc1qSncLdHv7o10G9y1N8I0JqsWx7TBh036tYVEXE2",
-	"callBackUrl": "https://chessbird.herokuapp.com/"
+  "consumer_key": "rd5ca3rFW7dimqQCh1SdiYcOb",
+	"consumer_secret": "x3bihWCrj1gjZdPgbATf6S5bTrHsXrnbCYYrZMgA8g7A4nMI57",
+	"access_token_key": "929380989775867904-f3YgvYh0QIiJSaqu0SgECoXFR02OQkG",
+	"access_token_secret": "zm2Yc1qSncLdHv7o10G9y1N8I0JqsWx7TBh036tYVEXE2",
 }
 
-var twitter = new Twitter(config);
+var client = new Twitter(config);
 
 // handle the chess state to status conversion here:
 var convertChessToString = function (arr) {
@@ -64,7 +64,4 @@ var convertChessToString = function (arr) {
   return toReturn;
 }
 
-// to make a tweet
-// twitter.postTweet(parameter, error, success);
-export {convertChessToString};
-exports.twitter = twitter;
+exports.client = client;

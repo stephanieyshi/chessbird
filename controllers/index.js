@@ -1,6 +1,5 @@
-import {convertChessToString} from 'tweet'
 var routes = require('./routes.js');
-var tweets = require('./tweet.js');
+var tweet = require('./tweet.js');
 
 routes.app.listen(3000);
 console.log("Listening on localhost:3000");
@@ -13,7 +12,11 @@ var success = function (data) {
   console.log('Data [%s]', data);
 };
 
-function main () {
-  // test 
-  tweets.postTweet({status:"Hello World"}, error, success);
-}
+tweet.client.post('statuses/update', {status: 'please work'}, function (error, tweet, response) {
+  if(error) {
+    console .log(error);
+  };
+  // do some verification here 
+   console.log(tweet);  // Tweet body.
+   console.log(response);  // Raw response object.
+});
