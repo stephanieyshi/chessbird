@@ -8,3 +8,5 @@ semantic/dist/themes/*
 !semantic/dist/*.js
 !semantic/dist/*.css
 !semantic/dist/themes/default/
+.sass-cache/
+style.css.map
