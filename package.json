@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/stephanieyshi/chessbirdt#readme",
   "dependencies": {
+    "chessboardjs": "0.0.1",
     "express": "^4.16.2",
     "handlebars": "^4.0.11",
-    "twitter-js-client": "0.0.5"
+    "twitter-js-client": "0.0.5",
+    "semantic-ui": "^2.2.13"
   }
 }

@@ -1,0 +1,19 @@
+$font: Comic Sans;
+$primary-color: #CCCCCC;
+
+body {
+    background-color: #000000;
+    color: $primary-color;
+    font-family: $font;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
+#input-form {
+    
+}
+
+#input-form-button {
+    color: aqua;
+}

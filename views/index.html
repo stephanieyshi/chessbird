@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../semantic/dist/semantic.min.css" />
+    <link rel="stylesheet" href="../public/css/main.css" />
+    <link rel="stylesheet" href="../public/css/chessboard-0.3.0.min.css" />
+</head>
+<body>
+    <div id="board" style="width: 400px"></div>
+    <button class="ui button" id="startBtn">Start</button>
+    <button class="ui button" id="clearBtn">Clear</button>
+  
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+    <script src="../semantic/dist/semantic.min.js"></script>
+    <script src="../public/js/chessboard-0.3.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var board = ChessBoard('board', {
+                draggable: true,
+                dropOffBoard: 'trash',
+                sparePieces: true
+            });
+            $('#startBtn').on('click', board.start);
+            $('#clearBtn').on('click', board.clear);
+        });
+    </script>
+</body>
+</html>
