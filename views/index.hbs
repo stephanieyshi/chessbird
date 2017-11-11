@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-  crossorigin="anonymous"></script>
-  <script src="semantic/dist/semantic.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
 </head>
 <body>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+        <div id="board" style="width: 400px"></div>
+        <button class="ui disabled button" id="confirmBtn">Confirm</button>
+        <button class="ui button" id="startBtn">Start</button>
+        <button class="ui button" id="clearBtn">Clear</button>
+  
+    <!--Your new content will be displayed in here-->
+    <div class="content-placeholder"></div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+    <script type="text/javascript" src="../semantic/dist/semantic.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+    <script type="text/javascript" src="../public/js/chessboard-0.3.0.min.js"></script>
+    <script type="text/javascript" src="../public/js/index.js"></script>
 </body>
 </html>

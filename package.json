@@ -20,6 +20,7 @@
   "dependencies": {
     "chessboardjs": "0.0.1",
     "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.11",
     "semantic-ui": "^2.2.13",
     "twitter-js-client": "0.0.5"
