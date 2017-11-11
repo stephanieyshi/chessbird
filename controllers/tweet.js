@@ -2,10 +2,10 @@ var Twitter = require('twitter');
 
 // put into environment variables
 var config = {
-  "consumer_key": "rd5ca3rFW7dimqQCh1SdiYcOb",
-	"consumer_secret": "x3bihWCrj1gjZdPgbATf6S5bTrHsXrnbCYYrZMgA8g7A4nMI57",
-	"access_token_key": "929380989775867904-f3YgvYh0QIiJSaqu0SgECoXFR02OQkG",
-	"access_token_secret": "zm2Yc1qSncLdHv7o10G9y1N8I0JqsWx7TBh036tYVEXE2",
+  "consumer_key": process.env.CONSUMER_KEY,
+	"consumer_secret": process.env.CONSUMER_SECRET,
+	"access_token_key": process.env.ACCESS_TOKEN_KEY,
+	"access_token_secret": process.env.ACCESS_TOKEN_SECRET
 }
 
 var client = new Twitter(config);
