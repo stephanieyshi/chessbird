@@ -18,6 +18,7 @@
   "homepage": "https://github.com/stephanieyshi/wanderlust#readme",
   "dependencies": {
     "express": "^4.16.2",
-    "handlebars": "^4.0.11"
+    "handlebars": "^4.0.11",
+    "semantic-ui": "^2.2.13"
   }
 }
