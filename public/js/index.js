@@ -2,6 +2,10 @@
 // 1. black or white
 // 2. current state of the board
 
+// /api/newgame
+// /api/newmove/<game id>
+// params: new state
+
 /*$.ajax({
 	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {*/
@@ -20,30 +24,36 @@
 		}
 
 		var onDrop = function (source, target) {
+			if (source == target) {
+				return;
+			}
 			if (!s) {
 				s = source;
 			}
+			var tempMove = (new Chess(data.board)).move({
+				from: s,
+				to: target,
+				promotion: 'q',
+			})
 			if (target == s) {
 				$('#confirmBtn').addClass('disabled');
 				s = null;
-				return 'snapback';
+				return;
 			}
-			var move = chess.move({
-				from: source,
-				to: target,
-				promotion: 'q'
-			})
-			console.log(move);
+			// var move = chess.move({
+			// 	from: s,
+			// 	to: target,
+			// 	promotion: 'q'
+			// })
+			console.log(tempMove);
 
-			if (move === null) {
+			if (tempMove === null) {
 				// do something that notifies of an invalid move
-				s = null;
 				$('body').append('Invalid move bro');
 				return 'snapback';
 			}
 
 			// if it's valid, turn on the "confirm" button
-			s = source; 
 			console.log('valid!');
 			$('#confirmBtn').removeClass('disabled');
 		}
