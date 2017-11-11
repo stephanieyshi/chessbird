@@ -32,6 +32,7 @@ data = {
 
 			// if it's valid, turn on the "confirm" button 
 			console.log('valid!');
+			$('#confirmBtn').removeClass('disabled');
 		}
 
 		var board = ChessBoard('board', {
@@ -41,6 +42,10 @@ data = {
 			onDragStart: onDragStart,
 			onDrop: onDrop,
 		});
+
+		if (chess.in_checkmate()) {
+			$('body').append($('h1').append("ur done fo"));
+		}
 
 		$('#startBtn').on('click', board.start);
 		$('#clearBtn').on('click', board.clear);
