@@ -1,36 +1,3 @@
-var fenToArray = function (fenfirst) {
-	// only takes first part of fen
-	var mapping = {
-		'r': 3,
-		'n': 5,
-		'b': 4,
-		'q': 2,
-		'k': 1,
-		'p': 6,
-		'P': 12,
-		'R': 9,
-		'N': 11,
-		'B': 10,
-		'Q': 8,
-		'K': 7,
-	}
-	var arr = [];
-	var f = fenfirst.split();
-	for (var i = 0; i < f.length; i++) {
-		var arr2 = [];
-		for (var j = 0; j < f[i].length; j++) {
-			if (!isNaN(f[i][j])) {
-				for (var k = 0; k < parseInt(f[i][j]); k++) {
-					arr2.push(0);
-				}
-			} else {
-				arr2.push(mapping[f[i][j]]);
-			}
-		}
-		arr.push(arr2);
-	}
-	return arr;
-}
 
 $.ajax({
 	url: "../api/state/" + window.location.pathname.split('/').slice(-1)[0],

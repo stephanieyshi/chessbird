@@ -142,6 +142,9 @@ app.post('/api/new_move/:game_id', function (req, res) {
       lastTweet = doc.last_tweet;
       console.log(doc);
       // sending updated game state and updating the board
+      console.log(req)
+      console.log("===================================")
+      console.log(req.body)
       var chess = client.convertChessToString(req.body.board);
       var handle;
       if (req.body.player == b) {
