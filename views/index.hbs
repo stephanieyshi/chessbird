@@ -7,18 +7,19 @@
 <body>
     <div class="landing">
         <h1 class="ui header" id="header">🐦 chessbird 🐦</h1>
-        <button class="ui gray basic button" id="startBtn">&gt; start &lt;</button>
+        <button class="ui gray basic button" id="startBtn">&gt; sign in with twitter &lt;</button>
     </div>
 </body>
-    
-    
+
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
     <script type="text/javascript" src="../semantic/dist/semantic.min.js"></script>
     <script>
-        document.getElementById('startBtn').onclick = function() {
-            location.href = '/start';
-        };
+        $(function() {
+            $("#startBtn").on("click", function() {
+                window.open('/request-token', '_blank', 'toolbar=0,location=0,menubar=0');
+            });
+        });
     </script>
 </html>
