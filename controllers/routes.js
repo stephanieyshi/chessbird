@@ -20,10 +20,10 @@ app.use('/img', express.static(path.join(__dirname, '../views/img')));
 
 // establish express middleware
 var session = require("express-session");
-var bodyParser = require("body-parser");
 
 var passport = require('passport');
 var session = require('express-session');
+app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(session({
   secret: 'TOP_SECRET_OMG',
   resave: false,
@@ -36,6 +36,12 @@ app.use(passport.session());  // persistent login sessions
 
 app.get('/game', function (req, res) {
   res.render('../views/game');
+});
+
+app.get('/user',
+  function(req, res) {
+  	console.log(req);
+    res.send(req.user);
 });
 
 app.get('/', function (req, res) {
@@ -172,9 +178,27 @@ passport.use(new TwitterStrategy({
 	  	callbackURL: "http://localhost:3000/auth/twitter/callback"
   	},
   	function(token, tokenSecret, profile, cb) {
-    	User.findOrCreate({ twitterId: profile.id }, function (err, user) {
-     		return cb(err, user);
-    	});
+  		console.log(token);
+  		console.log(tokenSecret);
+  		User.findOne({ screen_name: profile.username }, function(err, doc) {
+  			if (!doc) {  // user doesn't exist
+  				console.log("Not Found!");
+  				newUser = new User({
+  					screen_name: profile.username, 
+    				access_token: token,
+    				access_secret: tokenSecret
+    			});
+				newUser.save(function (err) {
+          			if (err) console.log(err);
+          			return cb(err, true);
+      			});
+  			} else {
+  				console.log("Found!");
+  				doc.access_token = token;
+  				doc.access_secret = tokenSecret;
+  				return cb(err, true);
+  			}
+  		});
   	}
 ));
 
