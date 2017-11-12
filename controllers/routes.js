@@ -93,8 +93,7 @@ app.post('/api/new_game', function (req, res) {
     } else {
       // make the initial tweet
       client.twitter.statuses('update', {
-          status: "@" + player_2 + ", Let's start a game of chess!\n" + 
-          + "\n"
+          status: "@" + player_2 + ", let's start a game of chess with chessbird.herokuapp.com 🙂!\n" 
           + client.convertChessToString(initialChessState)
         },
         doc.access_token, //accessToken of player 1
