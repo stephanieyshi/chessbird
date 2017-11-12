@@ -16,7 +16,7 @@ app.set('view engine', '.hbs');
 // establish routes for public static resources
 app.use('/public', express.static(path.join(__dirname, "../public")));
 app.use('/semantic', express.static(path.join(__dirname, '../semantic')));
-app.use('/img', express.static(path.join(__dirname, '../views/img')));
+app.use('/game/img', express.static(path.join(__dirname, '../views/img')));
 
 // establish express middleware
 var session = require("express-session");
@@ -106,7 +106,8 @@ app.post('/api/new_game', function (req, res) {
             console.log(error);
           } else {
             // set the tweetId to be the id of the new game
-            tweetId = data.id;
+            console.log(data);
+            //tweetId = response.body.id;
           }
       });
       if (Object.keys(req.query).length == 2) {
@@ -127,14 +128,23 @@ app.post('/api/new_game', function (req, res) {
 });
 
 app.get('/api/state/:game_id', function (req, res) {
-  Game.findOne({id: req.params.game_id}, function(err, doc) {
-  	res.json(doc.board_state);
+  Game.findOne({id: req.param.game_id}, function(err, doc) {
+    if (doc) {
+  	  res.json(doc.board_state);
+    } else {
+      res.redirect('/');
+    }
   });
 });
 
 app.post('/api/new_move/:game_id', function (req, res) {
+<<<<<<< Updated upstream
   var player_2 = req.query['player2'].trim();
   var player_1 = req.query['player1'].trim();
+=======
+  var player_2 = req.query['player_2'].trim();
+  var player_1 = req.user.screen_name;
+>>>>>>> Stashed changes
   var lastTweet;
   Game.findOne({ id: req.params.game_id}, function (err, doc) {
     if (!doc) {

@@ -99,7 +99,7 @@ $.ajax({
 				// you win!
 			}
 			$.ajax({
-				url: './api/new_move/' + window.location.pathname.split('/').slice(-1)[0],
+				url: '../api/new_move/' + window.location.pathname.split('/').slice(-1)[0],
 				data: {
 					fen: chess.fen(),
 					board: fenToArray(chess.fen()),
