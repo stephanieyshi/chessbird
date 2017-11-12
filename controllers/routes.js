@@ -128,7 +128,7 @@ app.post('/api/new_game', function (req, res) {
 });
 
 app.get('/api/state/:game_id', function (req, res) {
-  Game.findOne({id: req.param.game_id}, function(err, doc) {
+  Game.findOne({_id: req.param.game_id}, function(err, doc) {
     if (doc) {
   	  res.json(doc.board_state);
     } else {
@@ -138,8 +138,6 @@ app.get('/api/state/:game_id', function (req, res) {
 });
 
 app.post('/api/new_move/:game_id', function (req, res) {
-  var player_2 = req.query['player_2'].trim();
-  var player_1 = req.user.screen_name;
   var lastTweet;
   Game.findOne({ _id: req.params.game_id}, function (err, doc) {
     if (!doc) {
@@ -147,7 +145,7 @@ app.post('/api/new_move/:game_id', function (req, res) {
       console.log("Not found!");
     } else {
       lastTweet = doc.last_tweet;
-      console.log(req.body);
+      console.log(doc);
       // sending updated game state and updating the board
       var chess = client.convertChessToString(req.body.board);
       var handle;
