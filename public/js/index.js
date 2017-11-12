@@ -10,19 +10,12 @@ $.ajax({
 	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {
 	$(document).ready(function() {
-        
-        // RENDERING
-       
-		data = {
-			player: 'w',
-			board: 'rnbqkbnr/pppppp1p/8/6p1/5P2/8/PPPPP1PP/RNBQKBNR w KQkq g6 0 2' // should be a FEN
-		};
 		var chess = new Chess(data.board);
 		var s, t;
 		var board;
 
 		var onDragStart = function (source, piece, position, orientation) {
-			if (piece[0] != data.player) {
+			if (piece[0] != data.board.split()[1]) {
 				return false;
 			}
 		}
@@ -42,7 +35,6 @@ $.ajax({
 			}
 
 			// if it's valid, turn on the "confirm" button
-			console.log('valid!');
 			$('.ui.modal').modal('show');
 			s = source;
 			t = target;
