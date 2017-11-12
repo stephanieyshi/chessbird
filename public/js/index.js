@@ -42,7 +42,7 @@ $.ajax({
 		// 	board: 'rnbqkbnr/pppppp1p/8/6p1/5P2/8/PPPPP1PP/RNBQKBNR w KQkq g6 0 2' // should be a FEN
 		// };
         
-		var chess = new Chess(data.board);
+		var chess = new Chess(data);
 		var s, t;
 		var board;
 
@@ -73,7 +73,7 @@ $.ajax({
 		}
         
 		var board = ChessBoard('board', {
-			position: data.board,
+			position: data,
 			draggable: true,
 			dropOffBoard: 'snapback',
 			onDragStart: onDragStart,

@@ -9,6 +9,10 @@
             <i class="close icon"></i>
             not a valid user
         </div>
+        <div class="ui hidden compact small positive message" id="success-msg">
+            <i class="close icon"></i>
+            success!
+        </div>
     
     <div class="landing">
         <form class="ui small form" id="invite-form">
@@ -51,7 +55,7 @@
                             url: '/api/new_game?player1=' + '{{{ player1.screen_name }}}' + '&player2=' + $('#user').val(),
                             type: 'post',
                             success: function (result) {
-                                window.location.href = "/game";
+                                $('#success-msg').removeClass('hidden');
                             }
                         })
                     })
