@@ -123,7 +123,7 @@ app.post('/api/new_game', function (req, res) {
 });
 
 app.get('/api/state/:game_id', function (req, res) {
-  Game.findOne({_id: req.param.game_id}, function(err, doc) {
+  Game.findOne({_id: req.params.game_id}, function(err, doc) {
     if (doc) {
   	  res.json(doc.board_state);
     } else {
