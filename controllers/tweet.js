@@ -1,75 +1,80 @@
-var Twitter = require('twitter-js-client').Twitter;
+var TwitterAPI = require('node-twitter-api');
 
-var error = function (err, response, body) {
-   console.log('ERROR [%s]', err);
- };
-
-var success = function (data) {
-  console.log('Data [%s]', data);
-};
-
-var config = {
-  "consumerKey": "rd5ca3rFW7dimqQCh1SdiYcOb",
-	"consumerSecret": "x3bihWCrj1gjZdPgbATf6S5bTrHsXrnbCYYrZMgA8g7A4nMI57",
-	"accessToken": "929380989775867904-f3YgvYh0QIiJSaqu0SgECoXFR02OQkG",
-	"accessTokenSecret": "zm2Yc1qSncLdHv7o10G9y1N8I0JqsWx7TBh036tYVEXE2",
-	"callBackUrl": "https://chessbird.herokuapp.com/"
-}
-
-var twitter = new Twitter(config);
+// put into environment variables
+var twitter = new TwitterAPI ({
+  consumerKey: process.env.CONSUMER_KEY,
+  consumerSecret: process.env.CONSUMER_SECRET,
+  callback: "https://chessbird.herokuapp.com/"
+});
 
 // handle the chess state to status conversion here:
-var convertChessState = function (arr) {
+function convertChessToString (arr) {
+  var toReturn  = '';
   for (var i = 0; i < arr.length; i++) {
+    if (i != 0) {
+      toReturn += '\n';
+    }
     var column = arr[i];
-    for (var j = 0; j < column.length; i++) {
+    for (var j = 0; j < column.length; j++) {
       switch (column[j]) {
         // possible chess states
         case 0:
           // empty
-          column[j] = String.fromCodePoint(0x2616);
+          toReturn += String.fromCodePoint(0x2616);
+          break;
         case 1:
           // white king
-          column[j] = String.fromCodePoint(0x2654);
+          toReturn += String.fromCodePoint(0x2654);
+          break;
         case 2:
           // white queen
-          column[j] = String.fromCodePoint(0x2655);
+          toReturn += String.fromCodePoint(0x2655);
+          break;
         case 3:
           // white chess rook
-          column[j] = String.fromCodePoint(0x2656);
+          toReturn += String.fromCodePoint(0x2656);
+          break;
         case 4:
           // white chess bishop
-          column[j] = String.fromCodePoint(0x2657);
+          toReturn += String.fromCodePoint(0x2657);
+          break;
         case 5:
           // white chess knight
-          column[j] = String.fromCodePoint(0x2658);
+          toReturn += String.fromCodePoint(0x2658);
+          break;
         case 6:
           // white chess pawn
-          column[j] = String.fromCodePoint(0x2659);
+          toReturn += String.fromCodePoint(0x2659);
+          break;
         case 7:
           // black chess king
-          column[j] = String.fromCodePoint(0x265A);
+          toReturn += String.fromCodePoint(0x265A);
+          break;
         case 8:
           // black chess queen
-          column[j] = String.fromCodePoint(0x265B);
+          toReturn += String.fromCodePoint(0x265B);
+          break;
         case 9:
           // black chess rook
-          column[j] = String.fromCodePoint(0x265C);
+          toReturn += String.fromCodePoint(0x265C);
+          break;
         case 10:
           // black chess bishop
-          column[j] = String.fromCodePoint(0x265D);
+          toReturn += String.fromCodePoint(0x265D);
+          break;
         case 11:
           // black chess knight
-          column[j] = String.fromCodePoint(0x265E);
+          toReturn += String.fromCodePoint(0x265E);
+          break;
         case 12:
           // black chess pawn
-          column[j] = String.fromCodePoint(0x265F);
+          toReturn += String.fromCodePoint(0x265F);
+          break;
       }
     }
   }
-  return arr;
+  return toReturn;
 }
 
-// to make a tweet
-// twitter.postTweet(parameter, error, success);
+exports.convertChessToString = convertChessToString;
 exports.twitter = twitter;
