@@ -2,8 +2,10 @@ var express = require('express');
 var exphbs  = require('express-handlebars');
 var path = require('path');
 
-var mongoose = require('mongoose'),
-  Game = mongoose.model('Game');
+var mongoose = require('mongoose');
+var Game = mongoose.model('Game');
+var User = mongoose.model('User')
+
 
 var app = express();
 var client  = require('./tweet.js');
@@ -127,6 +129,8 @@ app.get('/start', function (req, res) {
 
 // handle getting request tokens
 app.get('/request-token', function(req, res) {
+	console.log("SWAG");
+
   client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
     if (err) {
       res.status(500).send(err);
@@ -147,9 +151,19 @@ app.get('/access-token', function(req, res) {
       res.status(500).send(err);
     }
     else {
-      client.twiter.verifyCredentials(accessToken, accessSecret, params, function(error, data, response) {
+      client.twitter.verifyCredentials(accessToken, accessSecret, function(error, data, response) {
         // get the screen name of the user
-        userhandle = data['screen_name'];
+        screenName = data["screen_name"];
+        newUser = User({
+        	'screen_name': screenName,
+        	'access_token': accessToken,
+        	'access_secret': accessSecret
+        });
+        newUser.save(function (err) {
+		  if (err) console.log(err);
+		  // saved!
+		});
+		res.send("<script>window.close();</script>");
       });
       // send the requestToken and the _requestSecret to the database
     }

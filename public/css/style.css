@@ -6,7 +6,7 @@
 #confirmBtn, #twitterBtn {
   font-weight: 400; }
 
-.landing {
+.landing, .chessboard {
   position: absolute;
   top: 45%;
   left: 50%;
@@ -18,8 +18,12 @@
   color: #999999;
   font-weight: 400; }
 
-.ui.header, #label {
+.ui.header {
   color: #999999;
+  font-weight: 400; }
+
+#invite-form, #label, #invite-header {
+  color: #CCCCCC !important;
   font-weight: 400; }
 
 /*# sourceMappingURL=style.css.map */

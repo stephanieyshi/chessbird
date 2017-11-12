@@ -1,4 +1,3 @@
-//model/models.js
 'use strict';
 
 //import dependency
