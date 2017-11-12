@@ -5,7 +5,11 @@
   <link rel="stylesheet" type="text/css" href="../public/css/style.css">
 </head>
 <body>
-
+        <div class="ui hidden compact small negative message" id="error-msg">
+            <i class="close icon"></i>
+            not a valid user
+        </div>
+    
     <div class="landing">
         <form class="ui small form" id="invite-form" action="/game">
           <div class="field">
@@ -26,11 +30,13 @@
     <script type="text/javascript" src="../semantic/dist/semantic.min.js"></script>
     <script type="text/javascript" src="../public/js/index.js"></script>
     <script>
-    $(function() {
-        $("#challengeBtn").on("click", function() { 
-            window.location.href = "/game";
+        $('.message .close')
+          .on('click', function() {
+            $(this)
+              .closest('.message')
+              .transition('fade')
+            ;
         });
-    });
     </script>
 </body>
 </html>
