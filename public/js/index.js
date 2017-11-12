@@ -33,7 +33,7 @@ var fenToArray = function (fenfirst) {
 }
 
 $.ajax({
-	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
+	url: "../api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {
 	$(document).ready(function() {
         // REMOVE
@@ -94,6 +94,10 @@ $.ajax({
 				to: t,
 				promotion: 'q'
 			})
+
+			if (chess.in_checkmate()) {
+				// you win!
+			}
 			$.ajax({
 				url: './api/new_move/' + window.location.pathname.split('/').slice(-1)[0],
 				data: {
