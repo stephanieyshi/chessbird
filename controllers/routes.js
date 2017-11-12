@@ -82,7 +82,10 @@ var success = function (data) {
   console.log('Data [%s]', data);
 };
 
+var tweetId;
+
 app.post('/api/new_game', function (req, res) {
+<<<<<<< HEAD
   console.log()
   player_1 = req.query['player_1'].trim();
   player_2 = req.query['player_2'].trim();
@@ -103,8 +106,46 @@ app.post('/api/new_game', function (req, res) {
       } else {
         // set the tweetId to be the id of the new game
         tweetId = response.body.id;
+=======
+  player_1 = req.query['player_1'];
+  player_2 = req.query['player_2'];
+  User.findOne({screen_name: player_1}, function (err, doc) {
+    if (!doc) {
+      console.log("nothing found");
+    } else {
+      // make the initial tweet
+      client.twitter.statuses('update', {
+          status: "Let's start a game of chess!" + player_2
+          + "\n"
+          + client.convertChessToString(initialChessState)
+        },
+        doc.access_token, //accessToken of player 1
+        doc.access_secret, //accessSecret of player 1
+        function (error, data, response) {
+          if (error) {
+            console.log(error);
+          } else {
+            // set the tweetId to be the id of the new game
+            console.log(data);
+            tweetId = response.body.id;
+          }
+      });
+      if (Object.keys(req.query).length == 2) {
+        newGame = Game({
+          'player_1': player_1,
+          'player_2': player_2,
+          // identifier for the last tweet
+          'last_tweet': tweetId
+        });
+        newGame.save(function (err) {
+          if (err) console.log(err);
+          // saved!
+        });
+>>>>>>> a19b40a9ac74cd54c57c2a1107e94df7ead59264
       }
-  });
+    }
+  })
+  // verify player2 is valid twitter user
   // $.ajax({
   //   url: 'http://twitter.com/statuses/user_timeline.json?suppress_response_codes=1&screen_name='+player_2+'&count=1&callback=?',
   //   dataType: 'json',
@@ -115,6 +156,7 @@ app.post('/api/new_game', function (req, res) {
   //     }
   //   }
   // });
+<<<<<<< HEAD
   if (Object.keys(req.query).length == 2) {
     newGame = Game({
       'player_1': player_1,
@@ -128,6 +170,8 @@ app.post('/api/new_game', function (req, res) {
       // saved!
     });
   }
+=======
+>>>>>>> a19b40a9ac74cd54c57c2a1107e94df7ead59264
 	console.log(req.query);
 });
 
