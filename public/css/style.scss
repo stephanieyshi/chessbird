@@ -20,17 +20,13 @@ $light-grey: #CCCCCC;
     text-align: center;
 }
 
-#header {
+.ui.header, #invite-form, #label, #invite-header, #header {
     color: $dark-grey;
     font-weight: 400;
 }
 
-.ui.header {
-    color: $dark-grey;
-    font-weight: 400;
-}
-
-#invite-form, #label, #invite-header  {
-    color: $light-grey!important;
-    font-weight: 400;
+#error-msg {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
 }

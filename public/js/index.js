@@ -6,16 +6,59 @@
 // /api/newmove/<game id>
 // params: new state
 
+//$.ajax({
+//	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
+//}).done(function(data) {
+var fenToArray = function (fenfirst) {
+	var g = fen.split(' ')[0];
+	var mapping = {
+		'r': 3,
+		'n': 5,
+		'b': 4,
+		'q': 2,
+		'k': 1,
+		'p': 6,
+		'P': 12,
+		'R': 9,
+		'N': 11,
+		'B': 10,
+		'Q': 8,
+		'K': 7,
+	}
+	var arr = [];
+	var f = fen.split();
+	for (var i = 0; i < f.length; i++) {
+		var arr2 = [];
+		for (var j = 0; j < f[i].length; j++) {
+			if (!isNaN(f[i][j])) {
+				for (var k = 0; k < parseInt(f[i][j]); k++) {
+					arr2.push(0);
+				}
+			} else {
+				arr2.push(mapping[f[i][j]]);
+			}
+		}
+		arr.push(arr2);
+	}
+	return arr;
+}
+
 $.ajax({
 	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {
 	$(document).ready(function() {
+        // REMOVE
+        data = {
+			player: 'w',
+			board: 'rnbqkbnr/pppppp1p/8/6p1/5P2/8/PPPPP1PP/RNBQKBNR w KQkq g6 0 2' // should be a FEN
+		};
+        
 		var chess = new Chess(data.board);
 		var s, t;
 		var board;
 
 		var onDragStart = function (source, piece, position, orientation) {
-			if (piece[0] != data.board.split()[1]) {
+			if (piece[0] != data.board.split(' ')[1]) {
 				return false;
 			}
 		}
@@ -30,7 +73,8 @@ $.ajax({
 				promotion: 'q',
 			})
 			if (tempMove === null) {
-				$('body').append('Invalid move bro');
+                $('.message').removeClass('hidden');
+                $('.message').fadeIn();
 				return 'snapback';
 			}
 
@@ -63,9 +107,15 @@ $.ajax({
 				promotion: 'q'
 			})
 			$.ajax({
-				url: './api/newmove',
+				url: './api/new_move/' + window.location.pathname.split('/').slice(-1)[0],
 				data: {
-					board: chess.fen(),
+					board: fenToArray(chess.fen()),
+					position: chess.fen().split(' ')[0],
+					player: chess.fen().split(' ')[1],
+					castle: chess.fen().split(' ')[2],
+					enpassant: chess.fen().split(' ')[3],
+					halfmove: chess.fen().split(' ')[4],
+					fullmove: chess.fen().split(' ')[5],
 					id: window.location.pathname.split('/').slice(-1)[0]
 				},
 				type: 'post',
@@ -77,6 +127,6 @@ $.ajax({
 		});
 		$('#declineBtn').on('click', function () {
 			board.position(data.board, false);
-		})
+		});
 	});
 });
