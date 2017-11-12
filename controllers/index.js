@@ -13,13 +13,18 @@ var success = function (data) {
   console.log('Data [%s]', data);
 };
 
+var testArr = [
+  [1,2,3],
+  [1,2,3],
+  [1,2,3]
+]
 // get testarr from Brandon
 // TODO: get accessToken and accessSecret from storage
 client.twitter.statuses('update', {
     status: {status: client.convertChessToString(testArr)}
   },
-  accessToken,
-  accessSecret,
+  "",// accessToken,
+  "",// accessSecret
   function(error, data, response) {
     if (error) {
       console.log(error);

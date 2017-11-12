@@ -24,8 +24,8 @@ app.get('/request-token', function(req, res) {
       // redirect to login page
       res.redirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + requestToken);
     }
-  })
-})
+  });
+});
 
 app.get('/access-token', function(req, res) {
   var requestToken = req.query.oauth_token,
@@ -36,6 +36,13 @@ app.get('/access-token', function(req, res) {
     }
     else {
       // use the access token and the access secret to pass into the update
+      client.twitter.verifyCredentials(accessToken, accessSecret, params, function(error, data, response) {
+        if (error) {
+
+        } else {
+          res.json({screen_name: data["screen_name"]})
+        }
+      })
     }
   });
 });
