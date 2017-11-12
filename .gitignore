@@ -11,3 +11,5 @@ semantic/dist/themes/*
 .sass-cache/
 style.css.map
 app-env
+*.log
+npm-debug.log

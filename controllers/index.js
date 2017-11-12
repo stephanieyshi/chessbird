@@ -39,7 +39,6 @@ dummy_chess_board = [
 	[1, 2, 3, 4, 4, 3, 2, 1]
 ];
 
-// TODO: get accessToken and accessSecret from storage
 client.twitter.statuses('update', {
     status: {status: client.convertChessToString(dummy_chess_board)}
   },
