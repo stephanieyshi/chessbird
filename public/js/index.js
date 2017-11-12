@@ -6,6 +6,23 @@
 // /api/newmove/<game id>
 // params: new state
 
+$('#newgame').submit(function () {
+	data = {
+		user: ,// ,
+		other: $('#other-user').text
+	}
+	$.ajax({
+		type: 'POST',
+		data: data,
+		contentType: "application/json",
+		url: "./api/newgame",
+		success: function (data) {
+			window.location.href = "./" + data.id;
+			console.log('success');
+		}
+	})
+})
+
 $.ajax({
 	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {
