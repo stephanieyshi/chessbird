@@ -138,13 +138,8 @@ app.get('/api/state/:game_id', function (req, res) {
 });
 
 app.post('/api/new_move/:game_id', function (req, res) {
-<<<<<<< Updated upstream
-  var player_2 = req.query['player2'].trim();
-  var player_1 = req.query['player1'].trim();
-=======
   var player_2 = req.query['player_2'].trim();
   var player_1 = req.user.screen_name;
->>>>>>> Stashed changes
   var lastTweet;
   Game.findOne({ id: req.params.game_id}, function (err, doc) {
     if (!doc) {
