@@ -2,10 +2,10 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
-    <link rel="stylesheet" type="text/css" href="../public/css/style.css">
+  <link rel="stylesheet" type="text/css" href="../public/css/style.css">
 </head>
 <body>
-    
+
     <div class="landing">
         <h2 class="ui header">1.</h2>
         <button class="ui basic button" id="twitterBtn">sign in with your twitter</button>
@@ -25,5 +25,14 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
     <script type="text/javascript" src="../semantic/dist/semantic.min.js"></script>
     <script type="text/javascript" src="../public/js/index.js"></script>
+
+    <script>
+    $(function() {
+        $("#twitterBtn").on("click", function() {
+            console.log("Ayy");
+            window.location.href = "http://localhost:3000/twitter-request-token";
+        });
+    });
+    </script>
 </body>
 </html>

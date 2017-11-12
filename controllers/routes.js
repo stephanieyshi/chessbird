@@ -6,7 +6,6 @@ var mongoose = require('mongoose'),
   Game = mongoose.model('Game');
 
 var app = express();
-var client  = require('./tweet.js');
 
 // setup handlebars engine
 app.engine('hbs', exphbs({extname: '.hbs'}));
@@ -25,6 +24,27 @@ app.get('/', function (req, res) {
 	res.render('index');
 });
 
+var initialChessState =
+[
+  [3, 5, 4, 5, 1, 4, 5, 3],
+  [6, 6, 6, 6, 6, 6, 6, 6],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [12, 12, 12, 12, 12, 12, 12, 12],
+  [9, 11, 10, 8, 7, 10, 11, 9]
+]
+
+// error and success callbacks
+var error = function (err, response, body) {
+   console.log('ERROR [%s]', err);
+ };
+
+var success = function (data) {
+  console.log('Data [%s]', data);
+};
+
 app.post('/api/new_game', function (req, res) {
 	player_1 = req.query['player1'].trim().toLowerCase();
 	player_2 = req.query['player2'].trim().toLowerCase();
@@ -32,8 +52,6 @@ app.post('/api/new_game', function (req, res) {
 	// verify query parameters
 	// TODO: verify player2 is valid twitter user
 	if (Object.keys(req.query).length == 2) {
-		cb = 
-
 		newGame = Game({
 			'player_1': player_1,
 			'player_2': player_2,
@@ -47,7 +65,23 @@ app.post('/api/new_game', function (req, res) {
 	} else {
 		throw new Error("Not a valid query parameter!");
 	}
-
+  // make the initial tweet
+  client.twitter.statuses('update', {
+      status: "Let's start a game of chess!\n"
+      + req.query['link']
+      + "\n"
+      + client.convertChessToString(initialChessState)
+    },
+    "", //accessToken
+    "", //accessSecret
+    function (error, data, response) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(data);
+        console.log(response);
+      }
+  });
 	console.log(req.query);
 	res.send("Dope swag!");
 });
@@ -62,28 +96,36 @@ app.get('/api/state/:game_id', function (req, res) {
 
 app.post('/api/new_move/<game_id>', function (req, res) {
 	// get current 
-
 });
 
 app.get('/start', function (req, res) {
     res.render('../views/start');
-})
-
-var _requestSecret;
-// handle getting request tokens
-app.get('/request-token', function(req, res) {
-  client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      _requestSecret = requestSecret;
-      // redirect to login page
-      res.redirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + requestToken);
-    }
-  })
 });
 
-app.get('/access-token', function(req, res) {
+/*
+ * Twitter Authentication
+ */
+
+var client  = require('./tweet.js');
+var _requestSecret;
+
+// handle getting request tokens
+app.get('/twitter-request-token', function(req, res) {
+	client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
+	    if (err) {
+	    	console.log(err);
+	    	res.status(500).send(err);
+	    } else {
+	    	_requestSecret = requestSecret;
+	      	// redirect to login page
+	      	res.redirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + requestToken);
+	    }
+	});
+});
+
+// check if valid handle
+app.get('/twitter-access-token', function(req, res) {
+	console.log(req.query);
   var requestToken = req.query.oauth_token,
   verifier = req.query.oauth_verifier;
   client.twitter.getAccessToken(requestToken, _requestSecret, verifier, function(err, accessToken, accessSecret, results) {
@@ -91,14 +133,13 @@ app.get('/access-token', function(req, res) {
       res.status(500).send(err);
     }
     else {
-      // use the access token and the access secret to pass into the update
+      // send the tokens to the database
+      res.send
     }
   });
 });
 
-exports.app = app
 
-/*
- * Twitter Authentication
- */
 
+
+exports.app = app;

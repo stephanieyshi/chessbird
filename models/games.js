@@ -16,6 +16,7 @@ var GamesSchema = new Schema({
 	},
  	player_1: String,
  	player_2: String,
+ 	board_state: String,
  	last_tweet: String
 });
 
