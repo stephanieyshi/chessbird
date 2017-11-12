@@ -74,7 +74,7 @@ $.ajax({
 			})
 			if (tempMove === null) {
                 $('.message').removeClass('hidden');
-                $('.message').show();
+                $('.message').fadeIn();
 				return 'snapback';
 			}
 
@@ -127,6 +127,6 @@ $.ajax({
 		});
 		$('#declineBtn').on('click', function () {
 			board.position(data.board, false);
-		})
+		});
 	});
-//});
+});
