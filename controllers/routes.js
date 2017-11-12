@@ -15,12 +15,16 @@ app.use('/public', express.static(path.join(__dirname, "../public")));
 app.use('/semantic', express.static(path.join(__dirname, '../semantic')));
 app.use('/img', express.static(path.join(__dirname, '../views/img')));
 
-app.get('/play', function (req, res) {
-  res.render('../views/index');
+app.get('/game', function (req, res) {
+  res.render('../views/play');
 })
 
 app.get('/', function (req, res) {
-    res.render('../views/landing');
+    res.render('../views/index');
+})
+
+app.get('/start', function (req, res) {
+    res.render('../views/start');
 })
 
 exports.app = app;
