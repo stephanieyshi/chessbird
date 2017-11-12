@@ -48,12 +48,12 @@
               .transition('fade')});
 
         $(function() {
-            $("#challengeBtn").on("click", function() { 
+            $("#challengeBtn").on("click", function() {
+                $('#success-msg').removeClass('hidden');
                 $.ajax({
                     url: '/api/new_game?player1=' + '{{{ player1.screen_name }}}' + '&player2=' + $('#user').val(),
                     type: 'post',
                     success: function (result) {
-                        $('#success-msg').removeClass('hidden');
                         window.location.href = "/game";
                     }
                 })
