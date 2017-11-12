@@ -28,7 +28,7 @@ app.use(session({
   secret: 'TOP_SECRET_OMG',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: { secure: false, maxAge: 3600000 }
 }));
 app.use(passport.initialize());
 app.use(passport.session());  // persistent login sessions
@@ -85,15 +85,17 @@ var success = function (data) {
 var tweetId;
 
 app.post('/api/new_game', function (req, res) {
-  player_1 = req.query['player_1'];
-  player_2 = req.query['player_2'];
+  var player_1 = req.query['player1'];
+  var player_2 = req.query['player2'];
+  console.log(player_1);
+  console.log(player_2);
   User.findOne({screen_name: player_1}, function (err, doc) {
     if (!doc) {
       console.log("nothing found");
     } else {
       // make the initial tweet
       client.twitter.statuses('update', {
-          status: "Let's start a game of chess!" + player_2
+          status: "@" + player_2 + ", Let's start a game of chess!" + 
           + "\n"
           + client.convertChessToString(initialChessState)
         },
@@ -104,8 +106,7 @@ app.post('/api/new_game', function (req, res) {
             console.log(error);
           } else {
             // set the tweetId to be the id of the new game
-            console.log(data);
-            tweetId = response.body.id;
+            tweetId = data.id;
           }
       });
       if (Object.keys(req.query).length == 2) {
@@ -113,7 +114,8 @@ app.post('/api/new_game', function (req, res) {
           'player_1': player_1,
           'player_2': player_2,
           // identifier for the last tweet
-          'last_tweet': tweetId
+          'last_tweet': tweetId,
+          'board_state': 'start'
         });
         newGame.save(function (err) {
           if (err) console.log(err);
@@ -125,10 +127,8 @@ app.post('/api/new_game', function (req, res) {
 });
 
 app.get('/api/state/:game_id', function (req, res) {
-  Game.find({}, function(err, task) {
-    if (err)
-      res.send(err);
-      res.json(task);
+  Game.findOne({id: req.params.game_id}, function(err, doc) {
+  	res.json(doc.board_state);
   });
 });
 
@@ -172,11 +172,8 @@ app.post('/api/new_move/:game_id', function (req, res) {
 });
 
 // separate route for getting the username of the starting player
-var startingName;
 app.get('/getUsername', function (req, res) {
-  if (startingName) {
-      res.send(startingName);
-  }
+  res.send(req.user.screen_name);
 })
 
 
