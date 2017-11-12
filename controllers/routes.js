@@ -122,18 +122,6 @@ app.post('/api/new_game', function (req, res) {
       }
     }
   })
-  // verify player2 is valid twitter user
-  // $.ajax({
-  //   url: 'http://twitter.com/statuses/user_timeline.json?suppress_response_codes=1&screen_name='+player_2+'&count=1&callback=?',
-  //   dataType: 'json',
-  //   success: function (d) {
-  //     if (d && d.id) {
-  //     } else {
-  //       alert("Player 2 invalid! Please try entering again");
-  //     }
-  //   }
-  // });
-	console.log(req.query);
 });
 
 app.get('/api/state/:game_id', function (req, res) {
@@ -144,46 +132,42 @@ app.get('/api/state/:game_id', function (req, res) {
   });
 });
 
-app.post('/api/new_move/<game_id>', function (req, res) {
-  var player_2 = req.query['player_2'].trim();
-  var player_1 = req.user.screen_name;
+app.post('/api/new_move/:game_id', function (req, res) {
+  var player_2 = req.query['player2'].trim();
+  var player_1 = req.query['player1'].trim();
   var lastTweet;
-  Game.findOne({ id: game_id}, function (err, doc) {
+  Game.findOne({ id: req.params.game_id}, function (err, doc) {
     if (!doc) {
-      // the game does not exists
+      // the game does not exist
       console.log("Not found!");
     } else {
-      console.log("Found");
       lastTweet = doc.last_tweet;
-    }
-  });
-	// sending updated game state and updating the board
-  var chess = client.convertChessToString(req.body.board);
-  var handle;
-  if (req.body.player == b) {
-    handle = "@" + player_2;
-  } else {
-    handle = "@" + player_1;
-  };
-  // TODO: get the last game using the game id parameter
-  // get the acces token and the access secret using the username
-  // send the update
-  client.twitter.statuses('update', {
-    status: handle + "\n" + chess,
-    in_reply_to_status_id: lastTweet,//getting the last tweet id
-  },
-  req.user.access_token, //access-token,
-  req.user.access_secret, //access secret,
-  function (error, data, response) {
-    if (error) {
-      console.log(error);
-    } else {
-      // send out a confirmation message
-      console.log(data);
-      console.log(response);
-      // send out a success response
-      res.send('move successful');
-    }
+      // sending updated game state and updating the board
+      var chess = client.convertChessToString(req.body.board);
+      var handle;
+      if (req.body.player == b) {
+        handle = "@" + player_2;
+      } else {
+        handle = "@" + player_1;
+      };
+      // TODO: get the last game using the game id parameter
+      // get the acces token and the access secret using the username
+      // send the update
+      client.twitter.statuses('update', {
+        status: handle + "\n" + chess,
+        in_reply_to_status_id: lastTweet,//getting the last tweet id
+      },
+        doc.access_token, //access-token,
+        doc.access_secret, //access secret,
+        function (error, data, response) {
+          if (error) {
+            console.log(error);
+          } else {
+            // send out a success response
+            res.send('move successful');
+          }
+        });
+      }
   });
 });
 
