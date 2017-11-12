@@ -26,6 +26,7 @@
     "mongoose": "^4.13.1",
     "node-twitter-api": "^1.8.0",
     "semantic-ui": "^2.2.13",
+    "shortid": "^2.2.8",
     "twitter": "^1.7.1",
     "twitter-js-client": "0.0.5"
   }

@@ -2,10 +2,10 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
-    <link rel="stylesheet" type="text/css" href="../public/css/style.css">
+  <link rel="stylesheet" type="text/css" href="../public/css/style.css">
 </head>
 <body>
-    
+
     <div class="landing">
         <h2 class="ui header">1.</h2>
         <button class="ui basic button" id="twitterBtn">sign in with your twitter</button>
@@ -26,9 +26,11 @@
     <script type="text/javascript" src="../semantic/dist/semantic.min.js"></script>
     <script type="text/javascript" src="../public/js/index.js"></script>
     <script>
-        document.getElementById('twitterBtn').onclick = function() {
-            window.open('/request-token', '_blank', 'toolbar=0,location=0,menubar=0');
-        };
+    $(function() {
+        $("#twitterBtn").on("click", function() { 
+            window.open('/twitter-request-token', '_blank', 'toolbar=0,location=0,menubar=0');
+        });
+    });
     </script>
 </body>
 </html>

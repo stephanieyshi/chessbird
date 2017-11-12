@@ -2,9 +2,9 @@ var TwitterAPI = require('node-twitter-api');
 
 // put into environment variables
 var twitter = new TwitterAPI ({
-  consumerKey: process.env.CONSUMER_KEY,
-  consumerSecret: process.env.CONSUMER_SECRET,
-  callback: "https://chessbird.herokuapp.com/"
+  consumerKey: process.env.CONSUMER_KEY.trim(),
+  consumerSecret: process.env.CONSUMER_SECRET.trim(),
+  callback: "http://localhost:3000/twitter-access-token"
 });
 
 // handle the chess state to status conversion here:

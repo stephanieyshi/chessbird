@@ -6,7 +6,6 @@ var mongoose = require('mongoose'),
   Game = mongoose.model('Game');
 
 var app = express();
-var client  = require('./tweet.js');
 
 // setup handlebars engine
 app.engine('hbs', exphbs({extname: '.hbs'}));
@@ -56,12 +55,15 @@ app.post('/api/new_game', function (req, res) {
 		newGame = Game({
 			'player_1': player_1,
 			'player_2': player_2,
+			'board_state': 'start',
 			'last_tweet': "https://twitter.com/santigoodtime/status/929434636605968384"
 		});
 		newGame.save(function (err) {
 		  if (err) console.log(err);
 		  // saved!
 		});
+	} else {
+		throw new Error("Not a valid query parameter!");
 	}
   // make the initial tweet
   client.twitter.statuses('update', {
@@ -92,31 +94,38 @@ app.get('/api/state/:game_id', function (req, res) {
   });
 });
 
-// app.post('/api/new_move/<game_id>', function (req, res) {
-// 	// get current
-
-// });
+app.post('/api/new_move/<game_id>', function (req, res) {
+	// get current 
+});
 
 app.get('/start', function (req, res) {
     res.render('../views/start');
-})
+});
 
+/*
+ * Twitter Authentication
+ */
+
+var client  = require('./tweet.js');
 var _requestSecret;
+
 // handle getting request tokens
-app.get('/request-token', function(req, res) {
-  client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      _requestSecret = requestSecret;
-      // redirect to login page
-      res.redirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + requestToken);
-    }
-  });
+app.get('/twitter-request-token', function(req, res) {
+	client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
+	    if (err) {
+	    	console.log(err);
+	    	res.status(500).send(err);
+	    } else {
+	    	_requestSecret = requestSecret;
+	      	// redirect to login page
+	      	res.redirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + requestToken);
+	    }
+	});
 });
 
 // check if valid handle
-app.get('/access-token', function(req, res) {
+app.get('/twitter-access-token', function(req, res) {
+	console.log(req.query);
   var requestToken = req.query.oauth_token,
   verifier = req.query.oauth_verifier;
   client.twitter.getAccessToken(requestToken, _requestSecret, verifier, function(err, accessToken, accessSecret, results) {
@@ -125,8 +134,12 @@ app.get('/access-token', function(req, res) {
     }
     else {
       // send the tokens to the database
+      res.send
     }
   });
 });
+
+
+
 
 exports.app = app;
