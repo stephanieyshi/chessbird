@@ -168,9 +168,8 @@ app.post('/api/new_move/<game_id>', function (req, res) {
 });
 
 // separate route for getting the username of the starting player
-var startingName;
 app.get('/getUsername', function (req, res) {
-  res.send(startingName);
+  res.send(req.user.screen_name);
 })
 
 
