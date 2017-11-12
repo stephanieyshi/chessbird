@@ -5,10 +5,11 @@
   <link rel="stylesheet" type="text/css" href="../public/css/style.css">
 </head>
 <body>
-        <div class="ui hidden compact small negative message" id="error-msg">
-            <i class="close icon"></i>
-            not a valid user
-        </div>
+
+    <div class="ui hidden compact small negative message" id="error-msg">
+        <i class="close icon"></i>
+        not a valid user
+    </div>
     
     <div class="landing">
         <form class="ui small form" id="invite-form">
@@ -22,6 +23,11 @@
         
         <button class="ui basic button" id="challengeBtn" type="submit">send a challenge</button>
         
+        {{#if exists_game}}
+        <br/><br/><br/>
+        <hr />
+        <button class="ui basic button" id="gameBtn" type="submit">go to existing game</button>
+        {{/if}}
     </div>
     
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -40,24 +46,24 @@
 
         $(function() {
             $("#challengeBtn").on("click", function() { 
-                // $.ajax({
-                //     url: "http://api.twitter.com/1.1/users/search.json?q=" + $("#user").val() + "&count=1",
-                //     dataType: 'jsonp',
-                //     error: function () {
-                //         $('.message').removeClass('hidden');
-                //     },
-                //     success: function (result) {
-                        $.ajax({
-                            url: '/api/new_game?player1=' + '{{{ player1.screen_name }}}' + '&player2=' + $('#user').val(),
-                            type: 'post',
-                            success: function (result) {
-                                window.location.href = "/game";
-                            }
-                        })
-                    })
+                $.ajax({
+                    url: '/api/new_game?player1=' + '{{{ player1.screen_name }}}' + '&player2=' + $('#user').val(),
+                    type: 'post',
+                    success: function (result) {
+                        window.location.href = "/game";
+                    }
                 })
-            //})
-        //});            
+            })
+        });      
     </script>
+    {{#if exists_game}}
+    <script>
+        $(function() {
+            $("#gameBtn").on("click", function() { 
+                window.location.href = "http://localhost:3000/game/" + '{{{ game_id }}}';
+            })
+        });
+    </script>   
+    {{/if}}
 </body>
 </html>
