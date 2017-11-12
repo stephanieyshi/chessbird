@@ -37,10 +37,10 @@ $.ajax({
 }).done(function(data) {
 	$(document).ready(function() {
         // REMOVE
-        data = {
-			player: 'w',
-			board: 'rnbqkbnr/pppppp1p/8/6p1/5P2/8/PPPPP1PP/RNBQKBNR w KQkq g6 0 2' // should be a FEN
-		};
+  //       data = {
+		// 	player: 'w',
+		// 	board: 'rnbqkbnr/pppppp1p/8/6p1/5P2/8/PPPPP1PP/RNBQKBNR w KQkq g6 0 2' // should be a FEN
+		// };
         
 		var chess = new Chess(data.board);
 		var s, t;
@@ -99,7 +99,7 @@ $.ajax({
 				// you win!
 			}
 			$.ajax({
-				url: './api/new_move/' + window.location.pathname.split('/').slice(-1)[0],
+				url: '../api/new_move/' + window.location.pathname.split('/').slice(-1)[0],
 				data: {
 					fen: chess.fen(),
 					board: fenToArray(chess.fen()),
