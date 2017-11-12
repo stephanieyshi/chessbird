@@ -33,9 +33,25 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());  // persistent login sessions
 
+app.get('/', function (req, res) {
+	res.render('index');
+});
 
-app.get('/game', function (req, res) {
+app.get('/game/:game_id', function (req, res) {
   res.render('../views/game');
+});
+
+app.get('/start', function (req, res) {
+	Game.findOne({
+		$or: [{'player_1': req.user.screen_name}, {'player_2': req.user.screen_name}]
+	}, function (err, doc) {
+		if (doc) {
+			console.log(doc);
+			res.redirect('/game/' + doc._id);
+		} else {
+			res.render('../views/start');
+		}
+	});
 });
 
 app.get('/user',
@@ -44,9 +60,6 @@ app.get('/user',
     res.send(req.user);
 });
 
-app.get('/', function (req, res) {
-	res.render('index');
-});
 var _requestSecret, userhandle, player_1, player_2;
 var initialChessState =
 [
@@ -115,7 +128,6 @@ app.post('/api/new_game', function (req, res) {
     });
   }
 	console.log(req.query);
-	res.send("Dope swag!");
 });
 
 app.get('/api/state/:game_id', function (req, res) {
@@ -167,10 +179,6 @@ app.post('/api/new_move/<game_id>', function (req, res) {
       res.send('move successful');
     }
   });
-});
-
-app.get('/start', function (req, res) {
-  res.render('../views/start');
 });
 
 // separate route for getting the username of the starting player
@@ -234,78 +242,5 @@ app.get('/auth/twitter/callback',
     // Successful authentication, redirect home.
     res.redirect('/start');
   });
-
-// // check if valid handle
-// app.get('/access-token', function(req, res) {
-//   var requestToken = req.query.oauth_token,
-//   verifier = req.query.oauth_verifier;
-//   client.twitter.getAccessToken(requestToken, _requestSecret, verifier, function(err, accessToken, accessSecret, results) {
-//     if (err) {
-//       res.status(500).send(err);
-//     }
-//     else {
-//       client.twitter.verifyCredentials(accessToken, accessSecret, function(error, data, response) {
-//         // get the screen name of the user
-//         startingName = data["screen_name"];
-//         newUser = User({
-//         	'screen_name': startingName,
-//         	'access_token': accessToken,
-//         	'access_secret': accessSecret
-//         });
-//       newUser.save(function (err) {
-//           if (err) console.log(err);
-//           // saved!
-//       });
-// 		 res.send("<script>window.close();</script>");
-//       });
-//       // send the requestToken and the _requestSecret to the database
-//     }
-//   });
-// >>>>>>> 3e3e87facec16db6d546adcbe2d6e5b5a4fea293
-// });
-
-
-// // handle getting request tokens
-// app.get('/request-token', function(req, res) {
-// 	console.log("SWAG");
-
-//   client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
-//     if (err) {
-//       res.status(500).send(err);
-//     } else {
-//       _requestSecret = requestSecret;
-//       // redirect to login page
-//       res.redirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + requestToken);
-//     }
-//   });
-// });
-
-// // check if valid handle
-// app.get('/access-token', function(req, res) {
-//   var requestToken = req.query.oauth_token,
-//   verifier = req.query.oauth_verifier;
-//   client.twitter.getAccessToken(requestToken, _requestSecret, verifier, function(err, accessToken, accessSecret, results) {
-//     if (err) {
-//       res.status(500).send(err);
-//     }
-//     else {
-//       client.twitter.verifyCredentials(accessToken, accessSecret, function(error, data, response) {
-//         // get the screen name of the user
-//         screenName = data["screen_name"];
-//         newUser = User({
-//         	'screen_name': screenName,
-//         	'access_token': accessToken,
-//         	'access_secret': accessSecret
-//         });
-//         newUser.save(function (err) {
-// 		  if (err) console.log(err);
-// 		  // saved!
-// 		});
-// 		res.send("<script>window.close();</script>");
-//       });
-//       // send the requestToken and the _requestSecret to the database
-//     }
-//   });
-// });
 
 exports.app = app;
