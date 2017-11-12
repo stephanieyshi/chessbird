@@ -20,6 +20,10 @@ $light-grey: #CCCCCC;
     text-align: center;
 }
 
+.landing {
+    width: 30%;
+}
+
 .ui.header, #invite-form, #label, #invite-header, #header, #modal-header {
     color: $dark-grey;
     font-weight: 400;
@@ -29,8 +33,13 @@ $light-grey: #CCCCCC;
     background-color: #FFFFFF;
 }
 
-#error-msg {
+#error-msg, #success-msg {
     position: absolute;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, 0%);
+}
+
+#divider {
+    margin: 5px;
 }
