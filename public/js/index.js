@@ -96,7 +96,7 @@ $.ajax({
 			})
 
 			if (chess.in_checkmate()) {
-				// you win!
+				$('body').append($('h1').append("You win!!"));
 			}
 			$.ajax({
 				url: '../api/new_move/' + window.location.pathname.split('/').slice(-1)[0],
