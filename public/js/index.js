@@ -35,6 +35,9 @@ var fenToArray = function (fenfirst) {
 $.ajax({
 	url: "../api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {
+	if (data == 'start') {
+		data = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+	}
 	$(document).ready(function() {
         // REMOVE
   //       data = {
@@ -47,7 +50,7 @@ $.ajax({
 		var board;
 
 		var onDragStart = function (source, piece, position, orientation) {
-			if (piece[0] != data.board.split(' ')[1]) {
+			if (piece[0] != data.split(' ')[1]) {
 				return false;
 			}
 		}
@@ -119,7 +122,7 @@ $.ajax({
 			})
 		});
 		$('#declineBtn').on('click', function () {
-			board.position(data.board, false);
+			board.position(data, false);
 		});
 	});
 });
