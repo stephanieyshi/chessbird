@@ -6,16 +6,22 @@
 // /api/newmove/<game id>
 // params: new state
 
-$.ajax({
-	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
-}).done(function(data) {
+//$.ajax({
+//	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
+//}).done(function(data) {
 	$(document).ready(function() {
+        // REMOVE
+        data = {
+			player: 'w',
+			board: 'rnbqkbnr/pppppp1p/8/6p1/5P2/8/PPPPP1PP/RNBQKBNR w KQkq g6 0 2' // should be a FEN
+		};
+        
 		var chess = new Chess(data.board);
 		var s, t;
 		var board;
 
 		var onDragStart = function (source, piece, position, orientation) {
-			if (piece[0] != data.board.split()[1]) {
+			if (piece[0] != data.board.split(' ')[1]) {
 				return false;
 			}
 		}
@@ -30,7 +36,8 @@ $.ajax({
 				promotion: 'q',
 			})
 			if (tempMove === null) {
-				$('body').append('Invalid move bro');
+                $('.message').removeClass('hidden');
+                $('.message').show();
 				return 'snapback';
 			}
 
@@ -79,4 +86,4 @@ $.ajax({
 			board.position(data.board, false);
 		})
 	});
-});
+//});
