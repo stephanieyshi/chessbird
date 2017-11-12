@@ -13,7 +13,25 @@ app.get('/', function (req, res) {
 });
 
 app.post('/api/new_game', function (req, res) {
+	player_1 = req.query['player1'].trim().toLowerCase();
+	player_2 = req.query['player2'].trim().toLowerCase();
+
+	// verify query parameters
+	// TODO: verify player2 is valid twitter user
+	if (Object.keys(req.query).length == 2) {
+		newGame = Game({
+			'player_1': player_1,
+			'player_2': player_2,
+			'last_tweet': "https://twitter.com/santigoodtime/status/929434636605968384"
+		});
+		newGame.save(function (err) {
+		  if (err) console.log(err);
+		  // saved!
+		});
+	}
+
 	console.log(req.query);
+	res.send("Dope swag!");
 });
 
 app.get('/api/state/:game_id', function (req, res) {
