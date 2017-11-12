@@ -6,6 +6,40 @@
 // /api/newmove/<game id>
 // params: new state
 
+var fenToArray = function (fenfirst) {
+	var g = fen.split(' ')[0];
+	var mapping = {
+		'r': 3,
+		'n': 5,
+		'b': 4,
+		'q': 2,
+		'k': 1,
+		'p': 6,
+		'P': 12,
+		'R': 9,
+		'N': 11,
+		'B': 10,
+		'Q': 8,
+		'K': 7,
+	}
+	var arr = [];
+	var f = fen.split();
+	for (var i = 0; i < f.length; i++) {
+		var arr2 = [];
+		for (var j = 0; j < f[i].length; j++) {
+			if (!isNaN(f[i][j])) {
+				for (var k = 0; k < parseInt(f[i][j]); k++) {
+					arr2.push(0);
+				}
+			} else {
+				arr2.push(mapping[f[i][j]]);
+			}
+		}
+		arr.push(arr2);
+	}
+	return arr;
+}
+
 $.ajax({
 	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {
@@ -63,9 +97,15 @@ $.ajax({
 				promotion: 'q'
 			})
 			$.ajax({
-				url: './api/newmove',
+				url: './api/new_move/' + window.location.pathname.split('/').slice(-1)[0],
 				data: {
-					board: chess.fen(),
+					board: fenToArray(chess.fen()),
+					position: chess.fen().split(' ')[0],
+					player: chess.fen().split(' ')[1],
+					castle: chess.fen().split(' ')[2],
+					enpassant: chess.fen().split(' ')[3],
+					halfmove: chess.fen().split(' ')[4],
+					fullmove: chess.fen().split(' ')[5],
 					id: window.location.pathname.split('/').slice(-1)[0]
 				},
 				type: 'post',
