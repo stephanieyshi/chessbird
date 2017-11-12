@@ -6,37 +6,17 @@
 // /api/newmove/<game id>
 // params: new state
 
-$.ajax({
-	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
-}).done(function(data) {
+// $.ajax({
+// 	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
+// }).done(function(data) {
 	$(document).ready(function() {
         
         // RENDERING
-
-          // Grab the template script
-          var theTemplateScript = $("#board-template").html();
-          console.log(theTemplateScript);
-
-          // Compile the template
-          var theTemplate = Handlebars.compile(theTemplateScript);
-
-          // Define our data object
-          var context = {
-              board : '<div id="board" style="width: 400px"></div>'
-          };
-
-          // Pass our data to the template
-          var theCompiledHtml = theTemplate(context);
-          console.log(theCompiledHtml);
-
-          // Add the compiled html to the page
-          $('.content-placeholder').html(theCompiledHtml);
-
-        
-		// data = {
-		// 	player: 'w',
-		// 	board: 'rnbqkbnr/pppppp1p/8/6p1/5P2/8/PPPPP1PP/RNBQKBNR w KQkq g6 0 2' // should be a FEN
-		// };
+       
+		data = {
+			player: 'w',
+			board: 'rnbqkbnr/pppppp1p/8/6p1/5P2/8/PPPPP1PP/RNBQKBNR w KQkq g6 0 2' // should be a FEN
+		};
 		var chess = new Chess(data.board);
 		var s, t;
 		var inMove = false, returnBack = false;
@@ -90,7 +70,6 @@ $.ajax({
 			dropOffBoard: 'snapback',
 			onDragStart: onDragStart,
 			onDrop: onDrop,
-			onMoveEnd: onMoveEnd,
 			snapbackSpeed: 0,
 		});
 
@@ -110,4 +89,4 @@ $.ajax({
 			console.log(chess.fen());
 		})
 	});
-});
+// });
