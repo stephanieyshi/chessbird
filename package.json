@@ -22,6 +22,7 @@
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.11",
+    "node-twitter-api": "^1.8.0",
     "semantic-ui": "^2.2.13",
     "twitter": "^1.7.1",
     "twitter-js-client": "0.0.5"

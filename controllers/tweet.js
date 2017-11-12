@@ -1,14 +1,11 @@
-var Twitter = require('twitter');
+var TwitterAPI = require('node-twitter-api');
 
 // put into environment variables
-var config = {
-  "consumer_key": process.env.CONSUMER_KEY,
-	"consumer_secret": process.env.CONSUMER_SECRET,
-	"access_token_key": process.env.ACCESS_TOKEN_KEY,
-	"access_token_secret": process.env.ACCESS_TOKEN_SECRET
-}
-
-var client = new Twitter(config);
+var twitter = new TwitterAPI ({
+  consumerKey: process.env.CONSUMER_KEY,
+  consumerSecret: process.env.CONSUMER_SECRET,
+  callback: "https://chessbird.herokuapp.com/"
+});
 
 // handle the chess state to status conversion here:
 function convertChessToString (arr) {
@@ -79,5 +76,5 @@ function convertChessToString (arr) {
   return toReturn;
 }
 
-exports.client = client;
 exports.convertChessToString = convertChessToString;
+exports.twitter = twitter;
