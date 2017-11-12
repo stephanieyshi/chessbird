@@ -18,9 +18,31 @@ app.use('/public', express.static(path.join(__dirname, "../public")));
 app.use('/semantic', express.static(path.join(__dirname, '../semantic')));
 app.use('/img', express.static(path.join(__dirname, '../views/img')));
 
+// establish express middleware
+var session = require("express-session");
+
+var passport = require('passport');
+var session = require('express-session');
+app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(session({
+  secret: 'TOP_SECRET_OMG',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
+app.use(passport.initialize());
+app.use(passport.session());  // persistent login sessions
+
+
 app.get('/game', function (req, res) {
   res.render('../views/game');
-})
+});
+
+app.get('/user',
+  function(req, res) {
+  	console.log(req);
+    res.send(req.user);
+});
 
 app.get('/', function (req, res) {
 	res.render('index');
@@ -48,12 +70,13 @@ var success = function (data) {
 };
 
 app.post('/api/new_game', function (req, res) {
+  player_1 = req.query['player1'].trim().toLowerCase(); //black
+  player_2 = req.query['player2'].trim().toLowerCase(); //white
+  // verify player2 is valid twitter user
   var tweetId, usernameValid;
   // make the initial tweet
   client.twitter.statuses('update', {
-      status: "Let's start a game of chess!\n"
-      // TODO: make sure this has the actual link
-      + req.body.link
+      status: "Let's start a game of chess!" + player2
       + "\n"
       + client.convertChessToString(initialChessState)
     },
@@ -67,19 +90,16 @@ app.post('/api/new_game', function (req, res) {
         tweetId = response.body.id;
       }
   });
-  player_1 = req.query['player1'].trim().toLowerCase(); //black
-  player_2 = req.query['player2'].trim().toLowerCase(); //white
-  // verify player2 is valid twitter user
-  $.ajax({
-    url: 'http://twitter.com/statuses/user_timeline.json?suppress_response_codes=1&screen_name='+player_2+'&count=1&callback=?',
-    dataType: 'json',
-    success: function (d) {
-      if (d && d.id) {
-      } else {
-        alert("Player 2 invalid! Please try entering again");
-      }
-    }
-  });
+  // $.ajax({
+  //   url: 'http://twitter.com/statuses/user_timeline.json?suppress_response_codes=1&screen_name='+player_2+'&count=1&callback=?',
+  //   dataType: 'json',
+  //   success: function (d) {
+  //     if (d && d.id) {
+  //     } else {
+  //       alert("Player 2 invalid! Please try entering again");
+  //     }
+  //   }
+  // });
   if (Object.keys(req.query).length == 2) {
     newGame = Game({
       'player_1': player_1,
@@ -147,46 +167,132 @@ app.get('/getUsername', function (req, res) {
   }
 })
 
-// handle getting request tokens
-app.get('/request-token', function(req, res) {
-	console.log("SWAG");
-  client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      _requestSecret = requestSecret;
-      // redirect to login page
-      res.redirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + requestToken);
-    }
-  });
+
+/*
+ * Twitter Authentication
+ */
+
+var TwitterStrategy = require('passport-twitter').Strategy;
+
+passport.use(new TwitterStrategy({
+		consumerKey: process.env.CONSUMER_KEY.trim(),
+	  	consumerSecret: process.env.CONSUMER_SECRET.trim(),
+	  	callbackURL: "http://localhost:3000/auth/twitter/callback"
+  	},
+  	function(token, tokenSecret, profile, cb) {
+  		console.log(token);
+  		console.log(tokenSecret);
+  		User.findOne({ screen_name: profile.username }, function(err, doc) {
+  			if (!doc) {  // user doesn't exist
+  				console.log("Not Found!");
+  				newUser = new User({
+  					screen_name: profile.username,
+    				access_token: token,
+    				access_secret: tokenSecret
+    			});
+				newUser.save(function (err) {
+          			if (err) console.log(err);
+          			return cb(err, true);
+      			});
+  			} else {
+  				console.log("Found!");
+  				doc.access_token = token;
+  				doc.access_secret = tokenSecret;
+  				return cb(err, true);
+  			}
+  		});
+  	}
+));
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
 });
 
-// check if valid handle
-app.get('/access-token', function(req, res) {
-  var requestToken = req.query.oauth_token,
-  verifier = req.query.oauth_verifier;
-  client.twitter.getAccessToken(requestToken, _requestSecret, verifier, function(err, accessToken, accessSecret, results) {
-    if (err) {
-      res.status(500).send(err);
-    }
-    else {
-      client.twitter.verifyCredentials(accessToken, accessSecret, function(error, data, response) {
-        // get the screen name of the user
-        startingName = data["screen_name"];
-        newUser = User({
-        	'screen_name': startingName,
-        	'access_token': accessToken,
-        	'access_secret': accessSecret
-        });
-      newUser.save(function (err) {
-          if (err) console.log(err);
-          // saved!
-      });
-		 res.send("<script>window.close();</script>");
-      });
-      // send the requestToken and the _requestSecret to the database
-    }
-  });
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
 });
+
+app.get('/auth/twitter',
+  passport.authenticate('twitter'));
+
+app.get('/auth/twitter/callback',
+  passport.authenticate('twitter', { failureRedirect: '/' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/start');
+  });
+
+// // check if valid handle
+// app.get('/access-token', function(req, res) {
+//   var requestToken = req.query.oauth_token,
+//   verifier = req.query.oauth_verifier;
+//   client.twitter.getAccessToken(requestToken, _requestSecret, verifier, function(err, accessToken, accessSecret, results) {
+//     if (err) {
+//       res.status(500).send(err);
+//     }
+//     else {
+//       client.twitter.verifyCredentials(accessToken, accessSecret, function(error, data, response) {
+//         // get the screen name of the user
+//         startingName = data["screen_name"];
+//         newUser = User({
+//         	'screen_name': startingName,
+//         	'access_token': accessToken,
+//         	'access_secret': accessSecret
+//         });
+//       newUser.save(function (err) {
+//           if (err) console.log(err);
+//           // saved!
+//       });
+// 		 res.send("<script>window.close();</script>");
+//       });
+//       // send the requestToken and the _requestSecret to the database
+//     }
+//   });
+// >>>>>>> 3e3e87facec16db6d546adcbe2d6e5b5a4fea293
+// });
+
+
+// // handle getting request tokens
+// app.get('/request-token', function(req, res) {
+// 	console.log("SWAG");
+
+//   client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
+//     if (err) {
+//       res.status(500).send(err);
+//     } else {
+//       _requestSecret = requestSecret;
+//       // redirect to login page
+//       res.redirect("https://api.twitter.com/oauth/authenticate?oauth_token=" + requestToken);
+//     }
+//   });
+// });
+
+// // check if valid handle
+// app.get('/access-token', function(req, res) {
+//   var requestToken = req.query.oauth_token,
+//   verifier = req.query.oauth_verifier;
+//   client.twitter.getAccessToken(requestToken, _requestSecret, verifier, function(err, accessToken, accessSecret, results) {
+//     if (err) {
+//       res.status(500).send(err);
+//     }
+//     else {
+//       client.twitter.verifyCredentials(accessToken, accessSecret, function(error, data, response) {
+//         // get the screen name of the user
+//         screenName = data["screen_name"];
+//         newUser = User({
+//         	'screen_name': screenName,
+//         	'access_token': accessToken,
+//         	'access_secret': accessSecret
+//         });
+//         newUser.save(function (err) {
+// 		  if (err) console.log(err);
+// 		  // saved!
+// 		});
+// 		res.send("<script>window.close();</script>");
+//       });
+//       // send the requestToken and the _requestSecret to the database
+//     }
+//   });
+// });
 
 exports.app = app;

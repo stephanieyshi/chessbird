@@ -17,9 +17,9 @@
     <script type="text/javascript" src="../semantic/dist/semantic.min.js"></script>
     <script>
         $(function() {
-            $("#startBtn").on("click", function() {
-                window.open('/request-token', '_blank', 'toolbar=0,location=0,menubar=0');
-            });
-        });
+			$("#startBtn").click(function(e){
+            	window.location.href = 'http://localhost:3000/auth/twitter';
+        	});
+    	});
     </script>
 </html>

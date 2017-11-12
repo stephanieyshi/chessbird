@@ -11,7 +11,7 @@
           <div class="field">
             <label id="label">enter your friends' username</label>
               <div class="ui input">
-            <input type="text" name="username" placeholder="their username">
+                <input type="text" name="username" placeholder="their username">
               </div>
           </div>
           <button class="ui basic button" type="submit" id="challengeBtn">send a challenge</button>
@@ -26,21 +26,9 @@
     <script>
     $(function() {
         $("#challengeBtn").on("click", function() { 
-            window.location.href = "/game";
+            window.location.href = 'http://localhost:3000/game';
         });
     });
-            // e.preventDefault();
-            // $.ajax({type: "GET",
-            //         url: "/request-token",
-            //         // beforeSend: function(xhr){ 
-            //         //     xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-            //         // ;},
-            //         success:function(result){
-            //             $("#login-results").html(result);
-            //         }
-            // });
-    //     });
-    // });
     </script>
 </body>
 </html>
