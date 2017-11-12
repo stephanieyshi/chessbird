@@ -95,7 +95,7 @@ app.post('/api/new_game', function (req, res) {
     } else {
       // make the initial tweet
       client.twitter.statuses('update', {
-          status: "@" + player_2 + ", Let's start a game of chess!" + 
+          status: "@" + player_2 + ", Let's start a game of chess!" +
           + "\n"
           + client.convertChessToString(initialChessState)
         },
@@ -127,28 +127,28 @@ app.post('/api/new_game', function (req, res) {
 });
 
 app.get('/api/state/:game_id', function (req, res) {
-  Game.findOne({id: req.params.game_id}, function(err, doc) {
+  console.log(req.params.game_id);
+  Game.findOne({_id: req.params.game_id}, function(err, doc) {
   	res.json(doc.board_state);
   });
 });
 
 app.post('/api/new_move/:game_id', function (req, res) {
-  var player_2 = req.query['player2'].trim();
-  var player_1 = req.query['player1'].trim();
   var lastTweet;
-  Game.findOne({ id: req.params.game_id}, function (err, doc) {
+  Game.findOne({ _id: req.params.game_id}, function (err, doc) {
     if (!doc) {
       // the game does not exist
       console.log("Not found!");
     } else {
       lastTweet = doc.last_tweet;
+      console.log(req.body);
       // sending updated game state and updating the board
       var chess = client.convertChessToString(req.body.board);
       var handle;
       if (req.body.player == b) {
-        handle = "@" + player_2;
+        handle = "@" + doc.player2;
       } else {
-        handle = "@" + player_1;
+        handle = "@" + doc.player1;
       };
       // TODO: get the last game using the game id parameter
       // get the acces token and the access secret using the username
