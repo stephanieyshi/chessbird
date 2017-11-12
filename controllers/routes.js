@@ -129,6 +129,8 @@ app.post('/api/new_move/<game_id>', function (req, res) {
       // send out a confirmation message
       console.log(data);
       console.log(response);
+      // send out a success response
+      res.send('move successful');
     }
   });
 });
@@ -140,13 +142,14 @@ app.get('/start', function (req, res) {
 // separate route for getting the username of the starting player
 var startingName;
 app.get('/getUsername', function (req, res) {
-  res.send(startingName);
+  if (startingName) {
+      res.send(startingName);
+  }
 })
 
 // handle getting request tokens
 app.get('/request-token', function(req, res) {
 	console.log("SWAG");
-
   client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
     if (err) {
       res.status(500).send(err);
