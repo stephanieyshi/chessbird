@@ -178,25 +178,24 @@ passport.use(new TwitterStrategy({
 	  	callbackURL: "http://localhost:3000/auth/twitter/callback"
   	},
   	function(token, tokenSecret, profile, cb) {
-  		console.log(token);
-  		console.log(tokenSecret);
-  		User.findOne({ screen_name: profile.username }, function(err, doc) {
-  			if (!doc) {  // user doesn't exist
-  				console.log("Not Found!");
-  				newUser = new User({
+  		userJson = {
   					screen_name: profile.username, 
     				access_token: token,
     				access_secret: tokenSecret
-    			});
+    			}
+  		User.findOne({ screen_name: profile.username }, function(err, doc) {
+  			if (!doc) {  // user doesn't exist
+  				console.log("Not Found!");
+  				newUser = new User(userJson);
 				newUser.save(function (err) {
           			if (err) console.log(err);
-          			return cb(err, true);
+          			return cb(err, userJson);
       			});
   			} else {
   				console.log("Found!");
   				doc.access_token = token;
   				doc.access_secret = tokenSecret;
-  				return cb(err, true);
+  				return cb(err, userJson);
   			}
   		});
   	}
