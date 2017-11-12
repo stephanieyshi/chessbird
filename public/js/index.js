@@ -6,9 +6,9 @@
 // /api/newmove/<game id>
 // params: new state
 
-// $.ajax({
-// 	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
-// }).done(function(data) {
+$.ajax({
+	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
+}).done(function(data) {
 	$(document).ready(function() {
         
         // RENDERING
@@ -19,7 +19,6 @@
 		};
 		var chess = new Chess(data.board);
 		var s, t;
-		var inMove = false, returnBack = false;
 		var board;
 
 		var onDragStart = function (source, piece, position, orientation) {
@@ -32,36 +31,21 @@
 			if (source == target) {
 				return 'snapback';
 			}
-			if (!s) {
-				s = source;
-			}
 			var tempMove = (new Chess(data.board)).move({
-				from: s,
+				from: source,
 				to: target,
 				promotion: 'q',
 			})
-
-			if (target == s) {
-				inMove = false;
-				$('#confirmBtn').addClass('disabled');
-				s = null;
-				returnBack = true;	
-				board.position(data.board, false);
-				return 'snapback';
-			} else if (tempMove === null) {
-				// do something that notifies of an invalid move
+			if (tempMove === null) {
 				$('body').append('Invalid move bro');
-				if (!inMove) {
-					s = null;
-				}
 				return 'snapback';
 			}
 
 			// if it's valid, turn on the "confirm" button
 			console.log('valid!');
-			inMove = true;
+			$('.ui.modal').modal('show');
+			s = source;
 			t = target;
-			$('#confirmBtn').removeClass('disabled');
 		}
         
 		var board = ChessBoard('board', {
@@ -86,7 +70,21 @@
 				to: t,
 				promotion: 'q'
 			})
-			console.log(chess.fen());
+			$.ajax({
+				url: './api/newmove',
+				data: {
+					board: chess.fen(),
+					id: window.location.pathname.split('/').slice(-1)[0]
+				},
+				type: 'post',
+				contentType: 'application/json',
+				success: function (result) {
+					window.location.href = result.redirect
+				}
+			})
+		});
+		$('#declineBtn').on('click', function () {
+			board.position(data.board, false);
 		})
 	});
-// });
+});

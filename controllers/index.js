@@ -53,3 +53,10 @@ client.twitter.statuses('update', {
     }
   }
 );
+
+var fenToBoard = function (fen) {
+	f = fen.split('/')
+	for (var i = 0; i < f.length; i++) {
+		
+	}
+}
