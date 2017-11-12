@@ -188,7 +188,7 @@ var TwitterStrategy = require('passport-twitter').Strategy;
 passport.use(new TwitterStrategy({
 		consumerKey: process.env.CONSUMER_KEY.trim(),
 	  	consumerSecret: process.env.CONSUMER_SECRET.trim(),
-	  	callbackURL: "http://localhost:3000/auth/twitter/callback"
+	  	callbackURL: "https://chessbird.herokuapp.com/auth/twitter/callback"
   	},
   	function(token, tokenSecret, profile, cb) {
   		userJson = {
