@@ -7,6 +7,7 @@
 <body>
 
     <div class="landing">
+        <h1 id="login-results"></h1>
         <h2 class="ui header">1.</h2>
         <button class="ui basic button" id="twitterBtn">sign in with your twitter</button>
         <div class="ui divider"></div>
@@ -27,10 +28,22 @@
     <script type="text/javascript" src="../public/js/index.js"></script>
     <script>
     $(function() {
-        $("#twitterBtn").on("click", function() { 
-            window.open('/twitter-request-token', '_blank', 'toolbar=0,location=0,menubar=0');
+        $("#twitterBtn").click(function(e){
+            window.open('/request-token', '_blank', 'toolbar=0,location=0,menubar=0');
         });
     });
+            // e.preventDefault();
+            // $.ajax({type: "GET",
+            //         url: "/request-token",
+            //         // beforeSend: function(xhr){ 
+            //         //     xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+            //         // ;},
+            //         success:function(result){
+            //             $("#login-results").html(result);
+            //         }
+            // });
+    //     });
+    // });
     </script>
 </body>
 </html>
