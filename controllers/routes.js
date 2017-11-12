@@ -95,7 +95,7 @@ app.post('/api/new_game', function (req, res) {
     } else {
       // make the initial tweet
       client.twitter.statuses('update', {
-          status: "Let's start a game of chess!" + player_2
+          status: "@" + player_2 + ", Let's start a game of chess!" + 
           + "\n"
           + client.convertChessToString(initialChessState)
         },
@@ -106,8 +106,7 @@ app.post('/api/new_game', function (req, res) {
             console.log(error);
           } else {
             // set the tweetId to be the id of the new game
-            console.log(data);
-            tweetId = response.body.id;
+            tweetId = data.id;
           }
       });
       if (Object.keys(req.query).length == 2) {
@@ -128,7 +127,7 @@ app.post('/api/new_game', function (req, res) {
 });
 
 app.get('/api/state/:game_id', function (req, res) {
-  Game.findOne({id: req.param('game_id')}, function(err, doc) {
+  Game.findOne({id: req.params.game_id}, function(err, doc) {
   	res.json(doc.board_state);
   });
 });
