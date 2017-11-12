@@ -23,6 +23,7 @@
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.11",
     "mongodb": "^2.2.33",
+    "mongoose": "^4.13.1",
     "node-twitter-api": "^1.8.0",
     "semantic-ui": "^2.2.13",
     "twitter": "^1.7.1",
