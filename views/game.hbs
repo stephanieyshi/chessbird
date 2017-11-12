@@ -7,13 +7,22 @@
 </head>
 <body>
     
-    <div id="board" style="width: 400px"></div>  
-    <!--Your new content will be displayed in here-->
-    <div class="content-placeholder"></div>
-    
-    <div class="buttons">
-        <button class="ui disabled button" id="confirmBtn">Confirm</button>
+    <div class="chessboard">
+        <h3 class="ui header">enter your move:</h3>
+        <div id="board" style="width: 400px"></div>  
     </div>
+    <div class="ui modal">
+        <div class="header">are you sure you want to make this move?</div>
+        <div id="declineBtn" class="actions">
+        <div class="ui black basic deny button">
+            nope
+        </div>
+    <div id="confirmBtn" class="ui positive right labeled icon button">
+      yes
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
     
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
