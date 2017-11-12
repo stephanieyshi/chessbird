@@ -82,29 +82,47 @@ var success = function (data) {
   console.log('Data [%s]', data);
 };
 
+var tweetId;
+
 app.post('/api/new_game', function (req, res) {
-  console.log()
-  player_1 = req.user.screen_name;
-  player_2 = req.query['player_2'].trim();
-  console.log(player_2);
-  // verify player2 is valid twitter user
-  var tweetId;
-  // make the initial tweet
-  client.twitter.statuses('update', {
-      status: "Let's start a game of chess!" + player2
-      + "\n"
-      + client.convertChessToString(initialChessState)
-    },
-    req.user.access_token, //accessToken of player 1
-    req.user.access_secret, //accessSecret of player 1
-    function (error, data, response) {
-      if (error) {
-        console.log(error);
-      } else {
-        // set the tweetId to be the id of the new game
-        tweetId = response.body.id;
+  player_1 = req.query['player_1'];
+  player_2 = req.query['player_2'];
+  User.findOne({screen_name: player_1}, function (err, doc) {
+    if (!doc) {
+      console.log("nothing found");
+    } else {
+      // make the initial tweet
+      client.twitter.statuses('update', {
+          status: "Let's start a game of chess!" + player_2
+          + "\n"
+          + client.convertChessToString(initialChessState)
+        },
+        doc.access_token, //accessToken of player 1
+        doc.access_secret, //accessSecret of player 1
+        function (error, data, response) {
+          if (error) {
+            console.log(error);
+          } else {
+            // set the tweetId to be the id of the new game
+            console.log(data);
+            tweetId = response.body.id;
+          }
+      });
+      if (Object.keys(req.query).length == 2) {
+        newGame = Game({
+          'player_1': player_1,
+          'player_2': player_2,
+          // identifier for the last tweet
+          'last_tweet': tweetId
+        });
+        newGame.save(function (err) {
+          if (err) console.log(err);
+          // saved!
+        });
       }
-  });
+    }
+  })
+  // verify player2 is valid twitter user
   // $.ajax({
   //   url: 'http://twitter.com/statuses/user_timeline.json?suppress_response_codes=1&screen_name='+player_2+'&count=1&callback=?',
   //   dataType: 'json',
@@ -115,18 +133,6 @@ app.post('/api/new_game', function (req, res) {
   //     }
   //   }
   // });
-  if (Object.keys(req.query).length == 2) {
-    newGame = Game({
-      'player_1': player_1,
-      'player_2': player_2,
-      // identifier for the last tweet
-      'last_tweet': tweetId
-    });
-    newGame.save(function (err) {
-      if (err) console.log(err);
-      // saved!
-    });
-  }
 	console.log(req.query);
 });
 
