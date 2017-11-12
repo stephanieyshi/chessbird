@@ -32,15 +32,20 @@ app.post('/api/new_game', function (req, res) {
 	// verify query parameters
 	// TODO: verify player2 is valid twitter user
 	if (Object.keys(req.query).length == 2) {
+		cb = 
+
 		newGame = Game({
 			'player_1': player_1,
 			'player_2': player_2,
+			'board_state': 'start',
 			'last_tweet': "https://twitter.com/santigoodtime/status/929434636605968384"
 		});
 		newGame.save(function (err) {
 		  if (err) console.log(err);
 		  // saved!
 		});
+	} else {
+		throw new Error("Not a valid query parameter!");
 	}
 
 	console.log(req.query);
@@ -55,10 +60,10 @@ app.get('/api/state/:game_id', function (req, res) {
   });
 });
 
-// app.post('/api/new_move/<game_id>', function (req, res) {
-// 	// get current 
+app.post('/api/new_move/<game_id>', function (req, res) {
+	// get current 
 
-// });
+});
 
 app.get('/start', function (req, res) {
     res.render('../views/start');
