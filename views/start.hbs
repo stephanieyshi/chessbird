@@ -5,6 +5,34 @@
   <link rel="stylesheet" type="text/css" href="../public/css/style.css">
 </head>
 <body>
+
+    <div class="landing">
+        <div class="ui vertically divided four wide grid">
+            <div class="row">
+                <div class="column">
+        <form class="ui small form" id="invite-form">
+  <h4 class="ui dividing header">enter your friend's username</h4>
+          <div class="field">
+              <div class="ui input">
+                <input id="user" type="text" name="username" placeholder="their username">
+              </div>
+          </div>
+        </form>
+        <div class="ui hidden divider" id="divider"></div>
+        <button class="ui basic button" id="challengeBtn" type="submit">send a challenge</button>
+                </div>
+        </div>
+            
+        {{#if exists_game}}
+            <div class="row">
+                <div class="column">
+        <button class="ui basic button" id="gameBtn" type="submit">go to existing game</button>
+                </div>
+            </div>
+        {{/if}}
+    </div>
+    </div>
+    
         <div class="ui hidden compact small negative message" id="error-msg">
             <i class="close icon"></i>
             not a valid user
@@ -13,25 +41,6 @@
             <i class="close icon"></i>
             success!
         </div>
-    
-    <div class="landing">
-        <form class="ui small form" id="invite-form">
-          <div class="field">
-            <label id="label">enter your friends' username</label>
-              <div class="ui input">
-                <input id="user" type="text" name="username" placeholder="their username">
-              </div>
-          </div>
-        </form>
-        
-        <button class="ui basic button" id="challengeBtn" type="submit">send a challenge</button>
-        
-        {{#if exists_game}}
-        <br/><br/><br/>
-        <hr />
-        <button class="ui basic button" id="gameBtn" type="submit">go to existing game</button>
-        {{/if}}
-    </div>
     
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
