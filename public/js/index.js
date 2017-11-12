@@ -10,6 +10,29 @@ $.ajax({
 	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {
 	$(document).ready(function() {
+        
+        // RENDERING
+
+          // Grab the template script
+          var theTemplateScript = $("#board-template").html();
+          console.log(theTemplateScript);
+
+          // Compile the template
+          var theTemplate = Handlebars.compile(theTemplateScript);
+
+          // Define our data object
+          var context = {
+              board : '<div id="board" style="width: 400px"></div>'
+          };
+
+          // Pass our data to the template
+          var theCompiledHtml = theTemplate(context);
+          console.log(theCompiledHtml);
+
+          // Add the compiled html to the page
+          $('.content-placeholder').html(theCompiledHtml);
+
+        
 		// data = {
 		// 	player: 'w',
 		// 	board: 'rnbqkbnr/pppppp1p/8/6p1/5P2/8/PPPPP1PP/RNBQKBNR w KQkq g6 0 2' // should be a FEN
@@ -60,16 +83,8 @@ $.ajax({
 			t = target;
 			$('#confirmBtn').removeClass('disabled');
 		}
-
-		var onMoveEnd = function (oldPos, newPos) {
-			console.log('change');
-			if (returnBack) {			
-				console.log('OWIEJFOIWEJOIJWOIGOGREWG');
-				returnBack = false;
-			}
-		}
-
-		board = ChessBoard('board', {
+        
+		var board = ChessBoard('board', {
 			position: data.board,
 			draggable: true,
 			dropOffBoard: 'snapback',
@@ -85,7 +100,7 @@ $.ajax({
 
 		$('#startBtn').on('click', board.start);
 		$('#clearBtn').on('click', board.clear);
-
+        
 		$('#confirmBtn').on('click', function () {
 			var move = chess.move({
 				from: s,
@@ -95,4 +110,4 @@ $.ajax({
 			console.log(chess.fen());
 		})
 	});
-})
+});

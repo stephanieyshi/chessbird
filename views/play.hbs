@@ -5,20 +5,24 @@
     <link rel="stylesheet" type="text/css" href="../public/css/style.css">
 </head>
 <body>
-    <div class="landing">
-        <h1 class="ui header" id="header">🐦 chessbird 🐦</h1>
-        <button class="ui grey basic button" id="startBtn">&gt; start &lt;</button>
-    </div>
-</body>
     
+    <script id="board-template" type="text/x-handlebars-template">
+    </script>
+
+  
+    <!--Your new content will be displayed in here-->
+    <div class="content-placeholder"></div>
+    
+    <div class="buttons">
+        <button class="ui disabled button" id="confirmBtn">Confirm</button>
+    </div>
     
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
     crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
     <script type="text/javascript" src="../semantic/dist/semantic.min.js"></script>
-    <script>
-        document.getElementById('startBtn').onclick = function() {
-            alert("button was clicked");
-        };
-    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+    <script type="text/javascript" src="../public/js/chessboard-0.3.0.min.js"></script>
+    <script type="text/javascript" src="../public/js/index.js"></script>
+</body>
 </html>

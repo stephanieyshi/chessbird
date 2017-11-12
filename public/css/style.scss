@@ -1,19 +1,26 @@
-$font: Comic Sans;
-$primary-color: #CCCCCC;
+$dark-grey: #999999;
+$light-grey: #CCCCCC;
 
-body {
-    background-color: #000000;
-    color: $primary-color;
-    font-family: $font;
+.buttons {
     position: fixed;
     top: 50%;
     left: 50%;
 }
 
-#input-form {
-    
+#confirmBtn, #twitterBtn {
+    font-weight: 400;
 }
 
-#input-form-button {
-    color: aqua;
+.landing {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+#header {
+    color: $dark-grey;
+    font-weight: 400;
 }
