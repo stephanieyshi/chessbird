@@ -47,7 +47,7 @@ app.get('/start', function (req, res) {
 	}, function (err, doc) {
 		if (doc) {
 			console.log(doc);
-			res.redirect('/game/' + doc._id);
+			res.render('../views/start', {player1 : req.user, game_id: doc._id, exists_game: true})
 		} else {
 			res.render('../views/start', {player1 : req.user});
 		}
@@ -82,8 +82,6 @@ var success = function (data) {
   console.log('Data [%s]', data);
 };
 
-var tweetId;
-
 app.post('/api/new_game', function (req, res) {
   var player_1 = req.query['player1'];
   var player_2 = req.query['player2'];
@@ -95,7 +93,7 @@ app.post('/api/new_game', function (req, res) {
     } else {
       // make the initial tweet
       client.twitter.statuses('update', {
-          status: "@" + player_2 + ", Let's start a game of chess!" +
+          status: "@" + player_2 + ", Let's start a game of chess!\n" +
           + "\n"
           + client.convertChessToString(initialChessState)
         },
@@ -106,23 +104,21 @@ app.post('/api/new_game', function (req, res) {
             console.log(error);
           } else {
             // set the tweetId to be the id of the new game
-            console.log(data);
-            //tweetId = response.body.id;
+            // console.log("response: " + JSON.stringify(response));
+            // console.log("data: " + JSON.stringify(data));
+	        newGame = Game({
+	          'player_1': player_1,
+	          'player_2': player_2,
+	          // identifier for the last tweet
+	          'last_tweet': data.id,
+	          'board_state': 'start'
+	        });
+	        newGame.save(function (err) {
+	          if (err) console.log(err);
+	          // saved!
+	        });
           }
       });
-      if (Object.keys(req.query).length == 2) {
-        newGame = Game({
-          'player_1': player_1,
-          'player_2': player_2,
-          // identifier for the last tweet
-          'last_tweet': tweetId,
-          'board_state': 'start'
-        });
-        newGame.save(function (err) {
-          if (err) console.log(err);
-          // saved!
-        });
-      }
     }
   })
 });
