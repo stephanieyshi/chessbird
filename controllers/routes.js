@@ -25,6 +25,27 @@ app.get('/', function (req, res) {
 	res.render('index');
 });
 
+var initialChessState =
+[
+  [3, 5, 4, 5, 1, 4, 5, 3],
+  [6, 6, 6, 6, 6, 6, 6, 6],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [12, 12, 12, 12, 12, 12, 12, 12],
+  [9, 11, 10, 8, 7, 10, 11, 9]
+]
+
+// error and success callbacks
+var error = function (err, response, body) {
+   console.log('ERROR [%s]', err);
+ };
+
+var success = function (data) {
+  console.log('Data [%s]', data);
+};
+
 app.post('/api/new_game', function (req, res) {
 	player_1 = req.query['player1'].trim().toLowerCase();
 	player_2 = req.query['player2'].trim().toLowerCase();
@@ -42,7 +63,23 @@ app.post('/api/new_game', function (req, res) {
 		  // saved!
 		});
 	}
-
+  // make the initial tweet
+  client.twitter.statuses('update', {
+      status: "Let's start a game of chess!\n"
+      + req.query['link']
+      + "\n"
+      + client.convertChessToString(initialChessState)
+    },
+    "", //accessToken
+    "", //accessSecret
+    function (error, data, response) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(data);
+        console.log(response);
+      }
+  });
 	console.log(req.query);
 	res.send("Dope swag!");
 });
@@ -78,6 +115,7 @@ app.get('/request-token', function(req, res) {
   });
 });
 
+// check if valid handle
 app.get('/access-token', function(req, res) {
   var requestToken = req.query.oauth_token,
   verifier = req.query.oauth_verifier;
@@ -86,16 +124,9 @@ app.get('/access-token', function(req, res) {
       res.status(500).send(err);
     }
     else {
-      // use the access token and the access secret to pass into the update
-      client.twitter.verifyCredentials(accessToken, accessSecret, params, function(error, data, response) {
-        if (error) {
-
-        } else {
-          res.json({screen_name: data["screen_name"]})
-        }
-      })
+      // send the tokens to the database
     }
   });
 });
 
-exports.app = app
+exports.app = app;
