@@ -18,7 +18,7 @@ app.use('/semantic', express.static(path.join(__dirname, '../semantic')));
 app.use('/img', express.static(path.join(__dirname, '../views/img')));
 
 app.get('/game', function (req, res) {
-  res.render('../views/play');
+  res.render('../views/game');
 })
 
 app.get('/', function (req, res) {

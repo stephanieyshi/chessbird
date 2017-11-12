@@ -24,7 +24,6 @@
     "handlebars": "^4.0.11",
     "mongodb": "^2.2.33",
     "mongoose": "^4.13.1",
-    "mongoose-shortid": "^0.4.2",
     "node-twitter-api": "^1.8.0",
     "semantic-ui": "^2.2.13",
     "shortid": "^2.2.8",
