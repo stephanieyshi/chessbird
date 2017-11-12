@@ -3,7 +3,7 @@
   top: 50%;
   left: 50%; }
 
-#confirmBtn, #twitterBtn {
+#confirmBtn, #twitterBtn, #declineBtn, #confirmBtn {
   font-weight: 400; }
 
 .landing, .chessboard {
@@ -14,9 +14,12 @@
   transform: translate(-50%, -50%);
   text-align: center; }
 
-.ui.header, #invite-form, #label, #invite-header, #header {
+.ui.header, #invite-form, #label, #invite-header, #header, #modal-header {
   color: #999999;
   font-weight: 400; }
+
+#actions {
+  background-color: #FFFFFF; }
 
 #error-msg {
   position: absolute;

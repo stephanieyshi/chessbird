@@ -74,7 +74,6 @@ $.ajax({
 			})
 			if (tempMove === null) {
                 $('.message').removeClass('hidden');
-                $('.message').fadeIn();
 				return 'snapback';
 			}
 

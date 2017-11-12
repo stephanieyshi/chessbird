@@ -7,7 +7,7 @@ $light-grey: #CCCCCC;
     left: 50%;
 }
 
-#confirmBtn, #twitterBtn {
+#confirmBtn, #twitterBtn, #declineBtn, #confirmBtn {
     font-weight: 400;
 }
 
@@ -20,9 +20,13 @@ $light-grey: #CCCCCC;
     text-align: center;
 }
 
-.ui.header, #invite-form, #label, #invite-header, #header {
+.ui.header, #invite-form, #label, #invite-header, #header, #modal-header {
     color: $dark-grey;
     font-weight: 400;
+}
+
+#actions {
+    background-color: #FFFFFF;
 }
 
 #error-msg {
