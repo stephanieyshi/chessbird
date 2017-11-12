@@ -4,7 +4,7 @@ var path = require('path');
 
 var mongoose = require('mongoose');
 var Game = mongoose.model('Game');
-var User = mongoose.model('User')
+var User = mongoose.model('User');
 
 var app = express();
 var client  = require('./tweet.js');
@@ -70,18 +70,20 @@ var success = function (data) {
 };
 
 app.post('/api/new_game', function (req, res) {
-  player_1 = req.query['player1'].trim().toLowerCase(); //black
-  player_2 = req.query['player2'].trim().toLowerCase(); //white
+  console.log()
+  player_1 = req.user.screen_name;
+  player_2 = req.query['player_2'].trim();
+  console.log(player_2);
   // verify player2 is valid twitter user
-  var tweetId, usernameValid;
+  var tweetId;
   // make the initial tweet
   client.twitter.statuses('update', {
       status: "Let's start a game of chess!" + player2
       + "\n"
       + client.convertChessToString(initialChessState)
     },
-    "", //accessToken
-    "", //accessSecret
+    req.user.access_token, //accessToken of player 1
+    req.user.access_secret, //accessSecret of player 1
     function (error, data, response) {
       if (error) {
         console.log(error);
@@ -125,6 +127,18 @@ app.get('/api/state/:game_id', function (req, res) {
 });
 
 app.post('/api/new_move/<game_id>', function (req, res) {
+  var player_2 = req.query['player_2'].trim();
+  var player_1 = req.user.screen_name;
+  var lastTweet;
+  Game.findOne({ id: game_id}, function (err, doc) {
+    if (!doc) {
+      // the game does not exists
+      console.log("Not found!");
+    } else {
+      console.log("Found");
+      lastTweet = doc.last_tweet;
+    }
+  });
 	// sending updated game state and updating the board
   var chess = client.convertChessToString(req.body.board);
   var handle;
@@ -138,10 +152,10 @@ app.post('/api/new_move/<game_id>', function (req, res) {
   // send the update
   client.twitter.statuses('update', {
     status: handle + "\n" + chess,
-    in_reply_to_status_id: "",//getting the last tweet id
+    in_reply_to_status_id: lastTweet,//getting the last tweet id
   },
-  "", //access-token,
-  "", //access secret,
+  req.user.access_token, //access-token,
+  req.user.access_secret, //access secret,
   function (error, data, response) {
     if (error) {
       console.log(error);
@@ -180,25 +194,24 @@ passport.use(new TwitterStrategy({
 	  	callbackURL: "http://localhost:3000/auth/twitter/callback"
   	},
   	function(token, tokenSecret, profile, cb) {
-  		console.log(token);
-  		console.log(tokenSecret);
-  		User.findOne({ screen_name: profile.username }, function(err, doc) {
-  			if (!doc) {  // user doesn't exist
-  				console.log("Not Found!");
-  				newUser = new User({
+  		userJson = {
   					screen_name: profile.username,
     				access_token: token,
     				access_secret: tokenSecret
-    			});
+    			}
+  		User.findOne({ screen_name: profile.username }, function(err, doc) {
+  			if (!doc) {  // user doesn't exist
+  				console.log("Not Found!");
+  				newUser = new User(userJson);
 				newUser.save(function (err) {
           			if (err) console.log(err);
-          			return cb(err, true);
+          			return cb(err, userJson);
       			});
   			} else {
   				console.log("Found!");
   				doc.access_token = token;
   				doc.access_secret = tokenSecret;
-  				return cb(err, true);
+  				return cb(err, userJson);
   			}
   		});
   	}
