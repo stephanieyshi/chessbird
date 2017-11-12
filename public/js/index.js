@@ -1,4 +1,6 @@
 
+
+
 $.ajax({
 	url: "../api/state/" + window.location.pathname.split('/').slice(-1)[0],
 }).done(function(data) {
@@ -69,10 +71,9 @@ $.ajax({
 				$('body').append($('h1').append("You win!!"));
 			}
 			$.ajax({
-				url: '../api/new_move/' + window.location.pathname.split('/').slice(-1)[0] + '?' + chess.fen(),
+				url: '../api/new_move/' + window.location.pathname.split('/').slice(-1)[0] + '?fen=' + chess.fen() + '&player=' + chess.fen().split(' ')[1],
 				data: {
 					fen: chess.fen(),
-					board: fenToArray(chess.fen()),
 					position: chess.fen().split(' ')[0],
 					player: chess.fen().split(' ')[1],
 					castle: chess.fen().split(' ')[2],

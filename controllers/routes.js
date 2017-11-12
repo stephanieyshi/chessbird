@@ -145,9 +145,9 @@ app.post('/api/new_move/:game_id', function (req, res) {
       console.log(req)
       console.log("===================================")
       console.log(req.body)
-      var chess = client.convertChessToString(req.body.board);
+      var chess = client.convertChessToString(req.query['fen']);
       var handle;
-      if (req.body.player == b) {
+      if (req.query['player'] == 'b') {
         handle = "@" + doc.player2;
       } else {
         handle = "@" + doc.player1;
