@@ -40,27 +40,24 @@
 
         $(function() {
             $("#challengeBtn").on("click", function() { 
-                $.ajax({
-                    url: "http://api.twitter.com/1.1/users/search.json?q=" + $("#user").val() + "&count=1",
-                    dataType: 'jsonp',
-                    error: function () {
-                        $('.message').removeClass('hidden');
-                    },
-                    success: function (result) {
+                // $.ajax({
+                //     url: "http://api.twitter.com/1.1/users/search.json?q=" + $("#user").val() + "&count=1",
+                //     dataType: 'jsonp',
+                //     error: function () {
+                //         $('.message').removeClass('hidden');
+                //     },
+                //     success: function (result) {
                         $.ajax({
-                            url: '/api/new_game?player1=' + '{{{ player1.screen_name }}}' + '&player2=' + $('.ui.input').text,
+                            url: '/api/new_game?player1=' + '{{{ player1.screen_name }}}' + '&player2=' + $('#user').val(),
                             type: 'post',
-                            success: function (result) {                    
+                            success: function (result) {
                                 window.location.href = "/game";
-                            },
-                            error: function () {
-                                console.log('u dumb');
                             }
                         })
-                    }
+                    })
                 })
-            })
-        });            
+            //})
+        //});            
     </script>
 </body>
 </html>
