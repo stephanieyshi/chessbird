@@ -97,3 +97,8 @@ app.get('/access-token', function(req, res) {
 });
 
 exports.app = app
+
+/*
+ * Twitter Authentication
+ */
+
