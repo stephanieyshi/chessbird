@@ -85,30 +85,10 @@ var success = function (data) {
 var tweetId;
 
 app.post('/api/new_game', function (req, res) {
-<<<<<<< HEAD
-  console.log()
-  player_1 = req.query['player_1'].trim();
-  player_2 = req.query['player_2'].trim();
+  var player_1 = req.query['player1'];
+  var player_2 = req.query['player2'];
+  console.log(player_1);
   console.log(player_2);
-  // verify player2 is valid twitter user
-  var tweetId;
-  // make the initial tweet
-  client.twitter.statuses('update', {
-      status: "Let's start a game of chess!" + player2
-      + "\n"
-      + client.convertChessToString(initialChessState)
-    },
-    req.user.access_token, //accessToken of player 1
-    req.user.access_secret, //accessSecret of player 1
-    function (error, data, response) {
-      if (error) {
-        console.log(error);
-      } else {
-        // set the tweetId to be the id of the new game
-        tweetId = response.body.id;
-=======
-  player_1 = req.query['player_1'];
-  player_2 = req.query['player_2'];
   User.findOne({screen_name: player_1}, function (err, doc) {
     if (!doc) {
       console.log("nothing found");
@@ -135,44 +115,16 @@ app.post('/api/new_game', function (req, res) {
           'player_1': player_1,
           'player_2': player_2,
           // identifier for the last tweet
-          'last_tweet': tweetId
+          'last_tweet': tweetId,
+          'board_state': 'start'
         });
         newGame.save(function (err) {
           if (err) console.log(err);
           // saved!
         });
->>>>>>> a19b40a9ac74cd54c57c2a1107e94df7ead59264
       }
     }
   })
-  // verify player2 is valid twitter user
-  // $.ajax({
-  //   url: 'http://twitter.com/statuses/user_timeline.json?suppress_response_codes=1&screen_name='+player_2+'&count=1&callback=?',
-  //   dataType: 'json',
-  //   success: function (d) {
-  //     if (d && d.id) {
-  //     } else {
-  //       alert("Player 2 invalid! Please try entering again");
-  //     }
-  //   }
-  // });
-<<<<<<< HEAD
-  if (Object.keys(req.query).length == 2) {
-    newGame = Game({
-      'player_1': player_1,
-      'player_2': player_2,
-      // identifier for the last tweet
-      'last_tweet': tweetId,
-      'board_state': 'start'
-    });
-    newGame.save(function (err) {
-      if (err) console.log(err);
-      // saved!
-    });
-  }
-=======
->>>>>>> a19b40a9ac74cd54c57c2a1107e94df7ead59264
-	console.log(req.query);
 });
 
 app.get('/api/state/:game_id', function (req, res) {
