@@ -1,16 +1,5 @@
-// parameters needed; pass in whether they are black or white
-// 1. black or white
-// 2. current state of the board
-
-// /api/newgame
-// /api/newmove/<game id>
-// params: new state
-
-//$.ajax({
-//	url: "./api/state/" + window.location.pathname.split('/').slice(-1)[0],
-//}).done(function(data) {
 var fenToArray = function (fenfirst) {
-	var g = fen.split(' ')[0];
+	// only takes first part of fen
 	var mapping = {
 		'r': 3,
 		'n': 5,
@@ -26,7 +15,7 @@ var fenToArray = function (fenfirst) {
 		'K': 7,
 	}
 	var arr = [];
-	var f = fen.split();
+	var f = fenfirst.split();
 	for (var i = 0; i < f.length; i++) {
 		var arr2 = [];
 		for (var j = 0; j < f[i].length; j++) {
@@ -108,6 +97,7 @@ $.ajax({
 			$.ajax({
 				url: './api/new_move/' + window.location.pathname.split('/').slice(-1)[0],
 				data: {
+					fen: chess.fen(),
 					board: fenToArray(chess.fen()),
 					position: chess.fen().split(' ')[0],
 					player: chess.fen().split(' ')[1],

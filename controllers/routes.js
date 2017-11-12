@@ -4,7 +4,7 @@ var path = require('path');
 
 var mongoose = require('mongoose');
 var Game = mongoose.model('Game');
-var User = mongoose.model('User')
+var User = mongoose.model('User');
 
 var app = express();
 var client  = require('./tweet.js');
@@ -49,7 +49,7 @@ app.get('/start', function (req, res) {
 			console.log(doc);
 			res.redirect('/game/' + doc._id);
 		} else {
-			res.render('../views/start');
+			res.render('../views/start', {player1 : req.user});
 		}
 	});
 });
@@ -83,17 +83,20 @@ var success = function (data) {
 };
 
 app.post('/api/new_game', function (req, res) {
-  var tweetId, usernameValid;
+  console.log()
+  player_1 = req.user.screen_name;
+  player_2 = req.query['player_2'].trim();
+  console.log(player_2);
+  // verify player2 is valid twitter user
+  var tweetId;
   // make the initial tweet
   client.twitter.statuses('update', {
-      status: "Let's start a game of chess!\n"
-      // TODO: make sure this has the actual link
-      + req.body.link
+      status: "Let's start a game of chess!" + player2
       + "\n"
       + client.convertChessToString(initialChessState)
     },
-    "", //accessToken
-    "", //accessSecret
+    req.user.access_token, //accessToken of player 1
+    req.user.access_secret, //accessSecret of player 1
     function (error, data, response) {
       if (error) {
         console.log(error);
@@ -102,19 +105,16 @@ app.post('/api/new_game', function (req, res) {
         tweetId = response.body.id;
       }
   });
-  player_1 = req.query['player1'].trim().toLowerCase(); //black
-  player_2 = req.query['player2'].trim().toLowerCase(); //white
-  // verify player2 is valid twitter user
-  $.ajax({
-    url: 'http://twitter.com/statuses/user_timeline.json?suppress_response_codes=1&screen_name='+player_2+'&count=1&callback=?',
-    dataType: 'json',
-    success: function (d) {
-      if (d && d.id) {
-      } else {
-        alert("Player 2 invalid! Please try entering again");
-      }
-    }
-  });
+  // $.ajax({
+  //   url: 'http://twitter.com/statuses/user_timeline.json?suppress_response_codes=1&screen_name='+player_2+'&count=1&callback=?',
+  //   dataType: 'json',
+  //   success: function (d) {
+  //     if (d && d.id) {
+  //     } else {
+  //       alert("Player 2 invalid! Please try entering again");
+  //     }
+  //   }
+  // });
   if (Object.keys(req.query).length == 2) {
     newGame = Game({
       'player_1': player_1,
@@ -139,6 +139,18 @@ app.get('/api/state/:game_id', function (req, res) {
 });
 
 app.post('/api/new_move/<game_id>', function (req, res) {
+  var player_2 = req.query['player_2'].trim();
+  var player_1 = req.user.screen_name;
+  var lastTweet;
+  Game.findOne({ id: game_id}, function (err, doc) {
+    if (!doc) {
+      // the game does not exists
+      console.log("Not found!");
+    } else {
+      console.log("Found");
+      lastTweet = doc.last_tweet;
+    }
+  });
 	// sending updated game state and updating the board
   var chess = client.convertChessToString(req.body.board);
   var handle;
@@ -152,10 +164,10 @@ app.post('/api/new_move/<game_id>', function (req, res) {
   // send the update
   client.twitter.statuses('update', {
     status: handle + "\n" + chess,
-    in_reply_to_status_id: "",//getting the last tweet id
+    in_reply_to_status_id: lastTweet,//getting the last tweet id
   },
-  "", //access-token,
-  "", //access secret,
+  req.user.access_token, //access-token,
+  req.user.access_secret, //access secret,
   function (error, data, response) {
     if (error) {
       console.log(error);
@@ -163,6 +175,8 @@ app.post('/api/new_move/<game_id>', function (req, res) {
       // send out a confirmation message
       console.log(data);
       console.log(response);
+      // send out a success response
+      res.send('move successful');
     }
   });
 });
@@ -186,7 +200,7 @@ passport.use(new TwitterStrategy({
   	},
   	function(token, tokenSecret, profile, cb) {
   		userJson = {
-  					screen_name: profile.username, 
+  					screen_name: profile.username,
     				access_token: token,
     				access_secret: tokenSecret
     			}
@@ -219,7 +233,7 @@ passport.deserializeUser(function(obj, cb) {
 app.get('/auth/twitter',
   passport.authenticate('twitter'));
 
-app.get('/auth/twitter/callback', 
+app.get('/auth/twitter/callback',
   passport.authenticate('twitter', { failureRedirect: '/' }),
   function(req, res) {
     // Successful authentication, redirect home.
