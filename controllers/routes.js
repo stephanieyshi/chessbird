@@ -49,7 +49,7 @@ app.get('/start', function (req, res) {
 			console.log(doc);
 			res.redirect('/game/' + doc._id);
 		} else {
-			res.render('../views/start');
+			res.render('../views/start', {player1 : req.user});
 		}
 	});
 });
