@@ -14,7 +14,7 @@ var success = function (data) {
 };
 
 // TODO: get accessToken and accessSecret from storage
-client.twitter.statuses('update', {
+/*client.twitter.statuses('update', {
     status: {status: client.convertChessToString(testArr)}
   },
   accessToken,
@@ -27,4 +27,4 @@ client.twitter.statuses('update', {
       console.log(response);
     }
   }
-);
+);*/
