@@ -10,6 +10,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // schema
 require('../models/games.js');
+require('../models/users.js');
 
 // establish routing
 var routes = require('./routes.js');

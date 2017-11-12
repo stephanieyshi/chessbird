@@ -2,8 +2,10 @@ var express = require('express');
 var exphbs  = require('express-handlebars');
 var path = require('path');
 
-var mongoose = require('mongoose'),
-  Game = mongoose.model('Game');
+var mongoose = require('mongoose');
+var Game = mongoose.model('Game');
+var User = mongoose.model('User')
+
 
 var app = express();
 var client  = require('./tweet.js');
@@ -56,7 +58,8 @@ app.post('/api/new_game', function (req, res) {
 		newGame = Game({
 			'player_1': player_1,
 			'player_2': player_2,
-			'last_tweet': "https://twitter.com/santigoodtime/status/929434636605968384"
+      // identifier for the last tweet
+			'last_tweet': res['id_str']
 		});
 		newGame.save(function (err) {
 		  if (err) console.log(err);
@@ -66,7 +69,8 @@ app.post('/api/new_game', function (req, res) {
   // make the initial tweet
   client.twitter.statuses('update', {
       status: "Let's start a game of chess!\n"
-      + req.query['link']
+      // TODO: make sure this has the actual link
+      + req.body.link
       + "\n"
       + client.convertChessToString(initialChessState)
     },
@@ -92,17 +96,41 @@ app.get('/api/state/:game_id', function (req, res) {
   });
 });
 
-// app.post('/api/new_move/<game_id>', function (req, res) {
-// 	// get current
-
-// });
+app.post('/api/new_move/<game_id>', function (req, res) {
+	// sending updated game state and updating the board
+  var chess = client.convertChessToString(req.body.board);
+  var handle;
+  if (req.body.player == b) {
+    // handle = "@" + user1;
+  } else {
+    // handle = "@" + user2;
+  };
+  // send the update
+  client.twitter.statuses('update', {
+    status: handle + "\n" + chess,
+    in_reply_to_status_id: "",//getting the last tweet id
+  },
+  "", //access-token,
+  "", //access secret,
+  function (error, data, response) {
+    if (error) {
+      console.log(error);
+    } else {
+      // send out a confirmation message
+      console.log(data);
+      console.log(response);
+    }
+  });
+});
 
 app.get('/start', function (req, res) {
     res.render('../views/start');
-})
+});
 
 // handle getting request tokens
 app.get('/request-token', function(req, res) {
+	console.log("SWAG");
+
   client.twitter.getRequestToken(function(err, requestToken, requestSecret) {
     if (err) {
       res.status(500).send(err);
@@ -123,9 +151,19 @@ app.get('/access-token', function(req, res) {
       res.status(500).send(err);
     }
     else {
-      client.twiter.verifyCredentials(accessToken, accessSecret, params, function(error, data, response) {
+      client.twitter.verifyCredentials(accessToken, accessSecret, function(error, data, response) {
         // get the screen name of the user
-        userhandle = data["screen_name"];
+        screenName = data["screen_name"];
+        newUser = User({
+        	'screen_name': screenName,
+        	'access_token': accessToken,
+        	'access_secret': accessSecret
+        });
+        newUser.save(function (err) {
+		  if (err) console.log(err);
+		  // saved!
+		});
+		res.send("<script>window.close();</script>");
       });
       // send the requestToken and the _requestSecret to the database
     }
