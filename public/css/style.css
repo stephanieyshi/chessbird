@@ -6,7 +6,7 @@
 #confirmBtn, #twitterBtn {
   font-weight: 400; }
 
-.landing {
+.landing, .chessboard {
   position: absolute;
   top: 45%;
   left: 50%;
